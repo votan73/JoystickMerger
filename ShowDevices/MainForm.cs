@@ -22,16 +22,25 @@ namespace xJoyMerger.ShowDevices
             input = new DirectInput();
 
             base.OnLoad(e);
+        }
+        protected async override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
 
-            var gameControllerList = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
+            textBox1.Text = "Loading...";
             var sb = new StringBuilder();
-            foreach (var deviceInstance in gameControllerList)
+            await System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
-                sb.Append(deviceInstance.InstanceName);
-                sb.Append(' ');
-                sb.Append(deviceInstance.InstanceGuid);
-                sb.AppendLine();
-            }
+                var gameControllerList = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
+                foreach (var deviceInstance in gameControllerList)
+                {
+                    sb.Append("Name: ");
+                    sb.Append(deviceInstance.InstanceName);
+                    sb.Append(" ID: ");
+                    sb.Append(deviceInstance.InstanceGuid);
+                    sb.AppendLine();
+                }
+            });
             textBox1.Text = sb.ToString();
         }
         DirectInput input;
