@@ -7,20 +7,15 @@ using SharpDX.DirectInput;
 using System.Windows.Forms;
 using vJoyInterfaceWrap;
 
-
 namespace JoystickMerger.DualT16000M
 {
-    public class GameDevPoller
+    public partial class GameDevPoller
     {
-        Joystick joystickDevice1;
-        Joystick joystickDevice2;
-
         MainForm mainForm;
 
         vJoy joystick;
         vJoy.JoystickState iReport;
         bool vjoyEnabled;
-        uint id = 1;
         double axisScale;
         DirectInput input;
 
@@ -69,7 +64,7 @@ namespace JoystickMerger.DualT16000M
             int cont = joystick.GetVJDContPovNumber(id);
             if (!AxisX || !AxisY || !AxisRX || !AxisRZ || nButtons < 32 || cont < 3)
             {
-                MessageBox.Show("vJoy Device is not configured correctly. Must have X,Y,Rx,Ry analog axis, 12 buttons and 2 Analog POVs. Cannot continue\n", "Error");
+                MessageBox.Show("vJoy Device is not configured correctly. Must have X,Y,Rx,Ry analog axis, 32 buttons and 3 Analog POVs. Cannot continue\n", "Error");
                 return;
             }
 
@@ -107,6 +102,27 @@ namespace JoystickMerger.DualT16000M
             var preferJoy2 = Properties.Settings.Default.PreferredJoy2Guid;
             if (preferJoy1 == preferJoy2)
                 preferJoy2 = Guid.Empty;
+
+            FindDevices(gameControllerList, ref preferJoy1, ref preferJoy2);
+
+            bool changed = false;
+            if (Properties.Settings.Default.PreferredJoy1Guid != preferJoy1)
+            {
+                Properties.Settings.Default.PreferredJoy1Guid = preferJoy1;
+                changed = true;
+            }
+            if (Properties.Settings.Default.PreferredJoy2Guid != preferJoy2)
+            {
+                Properties.Settings.Default.PreferredJoy2Guid = preferJoy2;
+                changed = true;
+            }
+            if (changed)
+                Properties.Settings.Default.Save();
+            return joystickDevice1 != null && joystickDevice2 != null && vjoyEnabled;
+        }
+
+        private void FindDevices(IList<DeviceInstance> gameControllerList, ref Guid preferJoy1, ref Guid preferJoy2)
+        {
             var newJoy1 = Guid.Empty;
             var newJoy2 = Guid.Empty;
             foreach (var deviceInstance in gameControllerList)
@@ -132,20 +148,6 @@ namespace JoystickMerger.DualT16000M
                     continue;
                 }
             }
-            bool changed = false;
-            if (Properties.Settings.Default.PreferredJoy1Guid != preferJoy1)
-            {
-                Properties.Settings.Default.PreferredJoy1Guid = preferJoy1;
-                changed = true;
-            }
-            if (Properties.Settings.Default.PreferredJoy2Guid != preferJoy2)
-            {
-                Properties.Settings.Default.PreferredJoy2Guid = preferJoy2;
-                changed = true;
-            }
-            if (changed)
-                Properties.Settings.Default.Save();
-            return joystickDevice1 != null && joystickDevice2 != null && vjoyEnabled;
         }
 
         bool DetectDevice(DeviceInstance deviceInstance, ref Joystick dev, ref Guid preferGuid, Label lbl)
@@ -169,7 +171,6 @@ namespace JoystickMerger.DualT16000M
         }
         public bool Poll()
         {
-            JoystickState state;
             if (joystickDevice1 == null || joystickDevice2 == null)
                 return false;
             if (!vjoyEnabled)
@@ -180,51 +181,8 @@ namespace JoystickMerger.DualT16000M
 
             try
             {
-                int[] povs;
-
-                // poll the joystick
-                joystickDevice2.Poll();
-                // update the joystick state field
-                state = joystickDevice2.GetCurrentState();
                 iReport.bDevice = (byte)id;
-                iReport.AxisXRot = (int)(DeadZone((65536 - state.Y), 2768) * axisScale);
-                iReport.AxisZ = (int)(DeadZone((double)state.X, 2768) * axisScale);
-                iReport.AxisYRot = (int)(DeadZone(state.RotationZ, 2768) * axisScale);
-
-
-                // Set throttle buttons one by one
-                var buttons = state.Buttons;
-                iReport.Buttons = 0;
-
-                for (int i = 0; i < buttons.Length; i++)
-                    if (buttons[i])
-                        iReport.Buttons |= (uint)1 << (i + 16);
-
-                // joystick povs
-                povs = state.PointOfViewControllers;
-                iReport.bHatsEx2 = (uint)povs[0]; // Neutral state
-
-                //mainForm.LblJoystick2Stat.Text = String.Join("", String.Join(" ", state.RotationZ, iReport.AxisYRot));
-
-                joystickDevice1.Poll();
-                // update the joystick state field
-                state = joystickDevice1.GetCurrentState();
-                iReport.AxisX = (int)(DeadZone(state.X, 2768) * axisScale);
-                iReport.AxisY = (int)(DeadZone((65536 - state.Y), 2768) * axisScale);
-                //iReport.AxisZRot = (int)(state.RotationZ * axisScale);
-                iReport.bHatsEx1 = FakePOV(state);
-
-                // Set joystick buttons one by one
-                buttons = state.Buttons;
-                for (int i = 0; i < buttons.Length; i++)
-                    if (buttons[i])
-                        iReport.Buttons |= (uint)1 << i;
-
-                // joystick povs
-                povs = state.PointOfViewControllers;
-                iReport.bHats = (uint)povs[0]; // Neutral state
-
-                //mainForm.LblJoystick1Stat.Text = String.Join("", String.Join(" ", state.RotationZ));
+                Feed();
 
                 /*** Feed the driver with the position packet - is fails then wait for input then try to re-acquire device ***/
                 if (!joystick.UpdateVJD(id, ref iReport))
@@ -248,11 +206,8 @@ namespace JoystickMerger.DualT16000M
             return value;
         }
 
-        private uint FakePOV(JoystickState state)
+        private uint FakePOV_X(int rot)
         {
-            var rot = state.RotationZ;
-            if (rot > 30000 && rot < 35536)
-                return uint.MaxValue;
             if (rot < 20000)
                 return 27000;
             if (rot > 45536)

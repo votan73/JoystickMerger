@@ -60,7 +60,7 @@ namespace JoystickMerger.DualT16000M
                     SetNotifierState(joyReady);
                     pollTimer.Change(500, 500);
                     if (WindowState == FormWindowState.Minimized)
-                        notifyIcon1.ShowBalloonTip(3000, "SuncomControllerMerge", "One of the controllers was disconnected", ToolTipIcon.None);
+                        notifyIcon1.ShowBalloonTip(3000, Text, "One of the controllers was disconnected", ToolTipIcon.None);
                 }
             }
             else if (gamePoller.ValidateDeviceExistance())
@@ -71,7 +71,7 @@ namespace JoystickMerger.DualT16000M
                 if (WindowState != FormWindowState.Minimized)
                     WindowState = FormWindowState.Minimized;
                 else
-                    notifyIcon1.ShowBalloonTip(3000, "SuncomControllerMerge", "SuncomControllerMerge is back on-line", ToolTipIcon.None);
+                    notifyIcon1.ShowBalloonTip(3000, Text, "SuncomControllerMerge is back on-line", ToolTipIcon.None);
             }
         }
 

@@ -105,7 +105,11 @@
     <Compile Include="..\Common\AllAssemblyInfo.cs">
       <Link>AllAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Common\ButtonMapper.cs">
+      <Link>ButtonMapper.cs</Link>
+    </Compile>
     <Compile Include="GameDevPoller.cs" />
+    <Compile Include="GameDevPoller.Generated.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
