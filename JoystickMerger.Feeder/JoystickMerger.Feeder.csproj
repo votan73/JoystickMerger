@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6310AD9C-BB6F-49EB-BF92-2AED00247E13}</ProjectGuid>
+    <ProjectGuid>{58ABFF95-2E80-42E2-B09C-38B68F4154FF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JoystickMerger.DualT16000M</RootNamespace>
-    <AssemblyName>DualT16000M</AssemblyName>
+    <RootNamespace>JoystickMerger.Feeder</RootNamespace>
+    <AssemblyName>JoystickMerger.Feeder</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>t16000m.ico</ApplicationIcon>

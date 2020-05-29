@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{80F45FB0-A522-4EEE-BDD6-CCA83EDC6860}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JoystickMerger.Generator</RootNamespace>
+    <AssemblyName>JoystickMerger.Generator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SharpDX">
+      <HintPath>..\packages\SharpDX.4.0.1\lib\net40\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput">
+      <HintPath>..\packages\SharpDX.DirectInput.4.0.1\lib\net40\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="vJoyInterfaceWrap">
+      <HintPath>..\packages\x64\vJoyInterfaceWrap.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Compile Include="DataListDropDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataSources.cs" />
+    <Compile Include="DeviceItem.cs" />
+    <Compile Include="DeviceList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DeviceListItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DeviceListItem.Designer.cs">
+      <DependentUpon>DeviceListItem.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="DeviceListItem.resx">
+      <DependentUpon>DeviceListItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="DropDownJoystick.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownJoystickAxis.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownJoystickPOV.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownVJoyAxis.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownVJoyPOV.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IMapItem.cs" />
+    <Compile Include="JoyKeyValue.cs" />
+    <Compile Include="JoyKeyValueDropDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemAxis.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemAxis.Designer.cs">
+      <DependentUpon>MapItemAxis.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemAxis.resx">
+      <DependentUpon>MapItemAxis.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemBase.Designer.cs">
+      <DependentUpon>MapItemBase.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemBase.resx">
+      <DependentUpon>MapItemBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemButtons.Designer.cs">
+      <DependentUpon>MapItemButtons.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemButtons.resx">
+      <DependentUpon>MapItemButtons.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemButtonToggle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemButtonToggle.Designer.cs">
+      <DependentUpon>MapItemButtonToggle.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemButtonToggle.resx">
+      <DependentUpon>MapItemButtonToggle.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemConditionBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemConditionBase.Designer.cs">
+      <DependentUpon>MapItemConditionBase.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemConditionBase.resx">
+      <DependentUpon>MapItemConditionBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemFakePOV.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemFakePOV.Designer.cs">
+      <DependentUpon>MapItemFakePOV.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemFakePOV.resx">
+      <DependentUpon>MapItemFakePOV.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemPOV.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemPOV.Designer.cs">
+      <DependentUpon>MapItemPOV.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemPOV.resx">
+      <DependentUpon>MapItemPOV.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemSwitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemSwitch.Designer.cs">
+      <DependentUpon>MapItemSwitch.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemSwitch.resx">
+      <DependentUpon>MapItemSwitch.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapLevel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="XmlExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
