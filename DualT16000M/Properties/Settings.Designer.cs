@@ -46,5 +46,17 @@ namespace JoystickMerger.DualT16000M.Properties {
                 this["PreferredJoy2Guid"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PreferredJoyGuids {
+            get {
+                return ((string)(this["PreferredJoyGuids"]));
+            }
+            set {
+                this["PreferredJoyGuids"] = value;
+            }
+        }
     }
 }

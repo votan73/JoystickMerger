@@ -18,24 +18,45 @@ namespace JoystickMerger.DualT16000M
         bool vjoyEnabled;
         double axisScale;
         DirectInput input;
+        readonly static System.Speech.Synthesis.SpeechSynthesizer speech = new System.Speech.Synthesis.SpeechSynthesizer() { Volume = 70, Rate = 1 };
+        private static void Say(System.Globalization.CultureInfo culture, string text)
+        {
+            var prompt = new System.Speech.Synthesis.PromptBuilder(culture);
+            prompt.StartSentence();
+            prompt.AppendText(text);
+            prompt.EndSentence();
+            speech.SpeakAsync(prompt);
+        }
+        private static void Say(string text)
+        {
+            if (speech.State == System.Speech.Synthesis.SynthesizerState.Speaking)
+                speech.SpeakAsyncCancelAll();
+            var prompt = new System.Speech.Synthesis.PromptBuilder();
+            prompt.StartSentence();
+            prompt.AppendText(text);
+            prompt.EndSentence();
+            speech.SpeakAsync(prompt);
+        }
 
         public void Init(MainForm parent)
         {
             mainForm = parent;
+            mainForm.SetDeviceNames(deviceNames);
+
             ClearDevices();
             // Create one joystick object and a position structure.
-            input = new DirectInput();
             joystick = new vJoy();
-            iReport = new vJoy.JoystickState();
             vjoyEnabled = false;
-
 
             // Get the driver attributes (Vendor ID, Product ID, Version Number)
             if (!joystick.vJoyEnabled())
             {
-                MessageBox.Show("vJoy driver not enabled: Failed Getting vJoy attributes.\n", "Error");
+                mainForm.ReportError("vJoy driver not enabled: Failed Getting vJoy attributes.\n");
                 return;
             }
+
+            input = new DirectInput();
+            iReport = new vJoy.JoystickState();
 
             // Get the state of the requested device
             VjdStat status = joystick.GetVJDStatus(id);
@@ -45,50 +66,38 @@ namespace JoystickMerger.DualT16000M
                 case VjdStat.VJD_STAT_FREE:
                     break;
                 case VjdStat.VJD_STAT_BUSY:
-                    MessageBox.Show("vJoy Device is already owned by another feeder. Cannot continue", "Error");
+                    mainForm.ReportError("vJoy Device is already owned by another feeder. Cannot continue");
                     return;
                 case VjdStat.VJD_STAT_MISS:
-                    MessageBox.Show("vJoy Device is not installed or disabled. Cannot continue", "Error");
+                    mainForm.ReportError("vJoy Device is not installed or disabled. Cannot continue");
                     return;
                 default:
-                    MessageBox.Show("vJoy Device general error. Cannot continue", "Error");
+                    mainForm.ReportError("vJoy Device general error. Cannot continue");
                     return;
             };
 
-            // Make sure all needed axes and buttons are supported
-            bool AxisX = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_X);
-            bool AxisY = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_Y);
-            bool AxisRX = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RX);
-            bool AxisRZ = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RZ);
-            int nButtons = joystick.GetVJDButtonNumber(id);
-            int cont = joystick.GetVJDContPovNumber(id);
-            if (!AxisX || !AxisY || !AxisRX || !AxisRZ || nButtons < 32 || cont < 3)
-            {
-                MessageBox.Show("vJoy Device is not configured correctly. Must have X,Y,Rx,Ry analog axis, 32 buttons and 3 Analog POVs. Cannot continue\n", "Error");
+            if (!ValidateVJoyConfiguration())
                 return;
-            }
 
             if ((status == VjdStat.VJD_STAT_OWN) || ((status == VjdStat.VJD_STAT_FREE) && (!joystick.AcquireVJD(id))))
             {
-                MessageBox.Show("Failed to acquire vJoy device number", "Error");
+                mainForm.ReportError("Failed to acquire vJoy device number");
                 return;
             }
 
             long maxval = 0;
             joystick.GetVJDAxisMax(id, HID_USAGES.HID_USAGE_X, ref maxval);
             axisScale = (double)maxval / 65536.0;
-            mainForm.LblVjoyStat.Text = "Found. Ver: " + joystick.GetvJoySerialNumberString();
+            mainForm.ReportVJoyVersion(joystick.GetvJoySerialNumberString());
             vjoyEnabled = true;
         }
 
         void ClearDevices()
         {
-            if (joystickDevice1 != null && !joystickDevice1.IsDisposed)
-                joystickDevice1.Dispose();
-            if (joystickDevice2 != null && !joystickDevice2.IsDisposed)
-                joystickDevice2.Dispose();
-            mainForm.LblJoystick2Stat.Text = "Waiting...";
-            mainForm.LblJoystick1Stat.Text = "Waiting...";
+            ReleaseDevices();
+            var guid = Guid.Empty;
+            for (int i = 0; i < numDevices; i++)
+                mainForm.SetDevicesState(i, false, ref guid);
         }
 
         public bool ValidateDeviceExistance()
@@ -103,56 +112,28 @@ namespace JoystickMerger.DualT16000M
             if (preferJoy1 == preferJoy2)
                 preferJoy2 = Guid.Empty;
 
-            FindDevices(gameControllerList, ref preferJoy1, ref preferJoy2);
+            var guids = new IdentifierList(Properties.Settings.Default.PreferredJoyGuids);
+            for (int i = 0; i < guids.Count; i++)
+                for (int t = i + 1; t < guids.Count; t++)
+                    if (guids[t] == guids[i])
+                        guids[t] = Guid.Empty;
+            while (guids.Count > numDevices) guids.RemoveAt(guids.Count - 1);
+            while (guids.Count < numDevices) guids.Add(Guid.Empty);
 
-            bool changed = false;
-            if (Properties.Settings.Default.PreferredJoy1Guid != preferJoy1)
+            FindDevices(gameControllerList, guids);
+
+            var newPreferred = guids.ToString();
+            if (Properties.Settings.Default.PreferredJoyGuids != newPreferred)
             {
-                Properties.Settings.Default.PreferredJoy1Guid = preferJoy1;
-                changed = true;
-            }
-            if (Properties.Settings.Default.PreferredJoy2Guid != preferJoy2)
-            {
-                Properties.Settings.Default.PreferredJoy2Guid = preferJoy2;
-                changed = true;
-            }
-            if (changed)
+                Properties.Settings.Default.PreferredJoyGuids = newPreferred;
                 Properties.Settings.Default.Save();
-            return joystickDevice1 != null && joystickDevice2 != null && vjoyEnabled;
-        }
-
-        private void FindDevices(IList<DeviceInstance> gameControllerList, ref Guid preferJoy1, ref Guid preferJoy2)
-        {
-            var newJoy1 = Guid.Empty;
-            var newJoy2 = Guid.Empty;
-            foreach (var deviceInstance in gameControllerList)
-            {
-                // Move to the first device
-                //if (DetectDevice(deviceInstance, "vjoy", ref vjoyDevice, mainForm.LblVjoyStat))
-                //continue;
-
-                //T.1600M
-                if (DetectDevice(deviceInstance, ref joystickDevice1, ref preferJoy1, mainForm.LblJoystick1Stat))
-                    continue;
-                if (DetectDevice(deviceInstance, ref joystickDevice2, ref preferJoy2, mainForm.LblJoystick2Stat))
-                    continue;
-
-                if (DetectDevice(deviceInstance, ref joystickDevice1, ref newJoy1, mainForm.LblJoystick1Stat))
-                {
-                    preferJoy1 = newJoy1;
-                    continue;
-                }
-                if (DetectDevice(deviceInstance, ref joystickDevice2, ref newJoy2, mainForm.LblJoystick2Stat))
-                {
-                    preferJoy2 = newJoy2;
-                    continue;
-                }
             }
+            return AllDevicesReady() && vjoyEnabled;
         }
 
-        bool DetectDevice(DeviceInstance deviceInstance, ref Joystick dev, ref Guid preferGuid, Label lbl)
+        bool DetectDevice(DeviceInstance deviceInstance, ref Joystick dev, string name, ref Guid preferGuid, Action<Guid> feedback)
         {
-            if (deviceInstance.ProductName.StartsWith("T.16000M", StringComparison.OrdinalIgnoreCase) &&
+            if (deviceInstance.ProductName.StartsWith(name, StringComparison.OrdinalIgnoreCase) &&
                 (preferGuid == Guid.Empty || deviceInstance.InstanceGuid == preferGuid))
             {
                 preferGuid = deviceInstance.InstanceGuid;
@@ -164,14 +145,15 @@ namespace JoystickMerger.DualT16000M
                 //dev.SetDataFormat(DeviceDataFormat.Joystick);
                 // Finally, acquire the device.
                 dev.Acquire();
-                lbl.Text = String.Concat("Found", " ", deviceInstance.InstanceGuid);
+                feedback(deviceInstance.InstanceGuid);
                 return true;
             }
             return false;
         }
+
         public bool Poll()
         {
-            if (joystickDevice1 == null || joystickDevice2 == null)
+            if (!AllDevicesReady())
                 return false;
             if (!vjoyEnabled)
             {
@@ -182,6 +164,9 @@ namespace JoystickMerger.DualT16000M
             try
             {
                 iReport.bDevice = (byte)id;
+                iReport.Buttons = 0;
+                iReport.bHats = iReport.bHatsEx1 = iReport.bHatsEx2 = iReport.bHatsEx3 = uint.MaxValue;
+
                 Feed();
 
                 /*** Feed the driver with the position packet - is fails then wait for input then try to re-acquire device ***/
@@ -191,7 +176,7 @@ namespace JoystickMerger.DualT16000M
                     mainForm.ReportVJoyDisconnect();
                 }
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 ClearDevices();
                 return false;
@@ -206,27 +191,29 @@ namespace JoystickMerger.DualT16000M
             return value;
         }
 
-        private uint FakePOV_X(int rot)
+        private uint FakePOV_X(uint prev, int rot)
         {
-            if (rot < 20000)
-                return 27000;
-            if (rot > 45536)
-                return 9000;
+            unchecked
+            {
+                if (prev == uint.MaxValue)
+                {
+                    if (rot < 20000)
+                        return 27000;
+                    if (rot > 45536)
+                        return 9000;
 
-            return uint.MaxValue;
+                    return uint.MaxValue;
+                }
+                else
+                {
+                    if (rot < 20000)
+                        return (uint)(prev < 18000 ? 27000 + 4500 : 27000 - 4500);
+                    if (rot > 45536)
+                        return (uint)(prev < 18000 ? 9000 - 4500 : 9000 + 4500);
+                    return prev;
+                }
+            }
         }
 
-        public void SwapJoysticks()
-        {
-            var help1 = joystickDevice2;
-            joystickDevice2 = joystickDevice1;
-            joystickDevice1 = help1;
-            var help2 = Properties.Settings.Default.PreferredJoy2Guid;
-            Properties.Settings.Default.PreferredJoy2Guid = Properties.Settings.Default.PreferredJoy1Guid;
-            Properties.Settings.Default.PreferredJoy1Guid = help2;
-
-            mainForm.LblJoystick1Stat.Text = String.Concat("Found", " ", joystickDevice1.Information.InstanceGuid);
-            mainForm.LblJoystick2Stat.Text = String.Concat("Found", " ", joystickDevice2.Information.InstanceGuid);
-        }
     }
 }

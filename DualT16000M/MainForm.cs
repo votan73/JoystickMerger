@@ -30,19 +30,6 @@ namespace JoystickMerger.DualT16000M
             notifyIcon1.Icon = Icon.FromHandle((on ? Properties.Resources.gamepad_on : Properties.Resources.gamepad_off).GetHicon());
         }
 
-        public Label LblVjoyStat
-        {
-            get { return lblVjoyStat; }
-        }
-        public Label LblJoystick1Stat
-        {
-            get { return lblJoystickStat; }
-        }
-        public Label LblJoystick2Stat
-        {
-            get { return lblThrottleStat; }
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -71,7 +58,7 @@ namespace JoystickMerger.DualT16000M
                 if (WindowState != FormWindowState.Minimized)
                     WindowState = FormWindowState.Minimized;
                 else
-                    notifyIcon1.ShowBalloonTip(3000, Text, "SuncomControllerMerge is back on-line", ToolTipIcon.None);
+                    notifyIcon1.ShowBalloonTip(3000, Text, "Controllers back on-line", ToolTipIcon.None);
             }
         }
 
@@ -87,14 +74,32 @@ namespace JoystickMerger.DualT16000M
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ShowInTaskbar = true;
-            notifyIcon1.Visible = false;
-            WindowState = FormWindowState.Normal;
+            if (e.Clicks > 1 || e.Button.HasFlag(MouseButtons.Right))
+            {
+                ShowInTaskbar = true;
+                notifyIcon1.Visible = false;
+                WindowState = FormWindowState.Normal;
+            }
         }
 
-        private void ButtonSwapJoysticks_Click(object sender, EventArgs e)
+        public void SetDeviceNames(IList<string> names)
         {
-            gamePoller.SwapJoysticks();
+            int height = this.Height - tableLayoutPanel1.Height;
+            tableLayoutPanel1.RowCount = names.Count + 1;
+            for (int i = 0; i < names.Count; i++)
+            {
+                var lblName = new Label() { Name = "lblJoystickName" + i, Text = names[i], AutoSize = true, Padding = new Padding(0, 5, 5, 0) };
+                tableLayoutPanel1.Controls.Add(lblName);
+                tableLayoutPanel1.SetColumn(lblName, 0);
+                tableLayoutPanel1.SetRow(lblName, i + 1);
+                toolTip1.SetToolTip(lblName, lblName.Text);
+                var lblStat = new Label() { Name = "lblJoystickStat" + i, AutoSize = true, Padding = new Padding(0, 5, 5, 0) };
+                tableLayoutPanel1.Controls.Add(lblStat);
+                tableLayoutPanel1.SetColumn(lblStat, 1);
+                tableLayoutPanel1.SetRow(lblStat, i + 1);
+            }
+            tableLayoutPanel1.AutoSize = true;
+            this.Height = height + tableLayoutPanel1.Height;
         }
 
         public void ReportVJoyDisconnect()
@@ -107,6 +112,35 @@ namespace JoystickMerger.DualT16000M
             else
             {
                 MessageBox.Show("Feeding vJoy device failed - try to enable device then press OK", "Error");
+            }
+        }
+        public void ReportError(string text)
+        {
+            if (this.InvokeRequired)
+            {
+                var txt = text;
+                MethodInvoker call = () => ReportError(txt);
+                BeginInvoke(call);
+            }
+            else
+                MessageBox.Show(text, "Error");
+        }
+        public void ReportVJoyVersion(string version)
+        {
+            lblVjoyStat.Text = "Found. Ver: " + version;
+        }
+        public void SetDevicesState(int num, bool ready, ref Guid id)
+        {
+            var lbl = tableLayoutPanel1.GetControlFromPosition(1, num + 1) as Label;
+            if (ready)
+            {
+                lbl.Text = "Found.";
+                toolTip1.SetToolTip(lbl, "ID: " + id);
+            }
+            else
+            {
+                lbl.Text = "Waiting...";
+                toolTip1.SetToolTip(lbl, lbl.Text);
             }
         }
     }

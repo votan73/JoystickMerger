@@ -31,18 +31,16 @@
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.lblVjoyStat = new System.Windows.Forms.Label();
-            this.lblJoystickStat = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.lblThrottleStat = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.ButtonSwapJoysticks = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(6, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 0;
@@ -51,47 +49,11 @@
             // lblVjoyStat
             // 
             this.lblVjoyStat.AutoSize = true;
-            this.lblVjoyStat.Location = new System.Drawing.Point(167, 9);
+            this.lblVjoyStat.Location = new System.Drawing.Point(396, 3);
             this.lblVjoyStat.Name = "lblVjoyStat";
             this.lblVjoyStat.Size = new System.Drawing.Size(52, 13);
             this.lblVjoyStat.TabIndex = 1;
             this.lblVjoyStat.Text = "Waiting...";
-            // 
-            // lblJoystickStat
-            // 
-            this.lblJoystickStat.AutoSize = true;
-            this.lblJoystickStat.Location = new System.Drawing.Point(167, 24);
-            this.lblJoystickStat.Name = "lblJoystickStat";
-            this.lblJoystickStat.Size = new System.Drawing.Size(52, 13);
-            this.lblJoystickStat.TabIndex = 2;
-            this.lblJoystickStat.Text = "Waiting...";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 39);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "T.1600M 2:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 24);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(62, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "T.1600M 1:";
-            // 
-            // lblThrottleStat
-            // 
-            this.lblThrottleStat.AutoSize = true;
-            this.lblThrottleStat.Location = new System.Drawing.Point(167, 39);
-            this.lblThrottleStat.Name = "lblThrottleStat";
-            this.lblThrottleStat.Size = new System.Drawing.Size(52, 13);
-            this.lblThrottleStat.TabIndex = 5;
-            this.lblThrottleStat.Text = "Waiting...";
             // 
             // notifyIcon1
             // 
@@ -99,37 +61,41 @@
             this.notifyIcon1.BalloonTipTitle = "Dual T16000M";
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            this.notifyIcon1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // ButtonSwapJoysticks
+            // tableLayoutPanel1
             // 
-            this.ButtonSwapJoysticks.Location = new System.Drawing.Point(15, 61);
-            this.ButtonSwapJoysticks.Name = "ButtonSwapJoysticks";
-            this.ButtonSwapJoysticks.Size = new System.Drawing.Size(136, 23);
-            this.ButtonSwapJoysticks.TabIndex = 6;
-            this.ButtonSwapJoysticks.Text = "Swap Joysticks";
-            this.ButtonSwapJoysticks.UseVisualStyleBackColor = true;
-            this.ButtonSwapJoysticks.Click += new System.EventHandler(this.ButtonSwapJoysticks_Click);
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.lblVjoyStat, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 5);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 19);
+            this.tableLayoutPanel1.TabIndex = 7;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 96);
-            this.Controls.Add(this.ButtonSwapJoysticks);
-            this.Controls.Add(this.lblThrottleStat);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.lblJoystickStat);
-            this.Controls.Add(this.lblVjoyStat);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(464, 30);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dual T.16000M";
             this.Resize += new System.EventHandler(this.MainForm_Resize);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -137,12 +103,9 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblVjoyStat;
-        private System.Windows.Forms.Label lblJoystickStat;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label lblThrottleStat;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private System.Windows.Forms.Button ButtonSwapJoysticks;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

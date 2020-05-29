@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SuncomControllerMerge.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="JoystickMerger.DualT16000M.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="PreferredJoy1Guid" Type="System.Guid" Scope="User">
@@ -7,6 +7,9 @@
     </Setting>
     <Setting Name="PreferredJoy2Guid" Type="System.Guid" Scope="User">
       <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
+    </Setting>
+    <Setting Name="PreferredJoyGuids" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
