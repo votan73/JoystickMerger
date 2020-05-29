@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JoystickMerger
 {
-    public static class ButtonMapper
+    static class ButtonMapper
     {
         static ButtonMapper()
         {
