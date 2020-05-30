@@ -228,5 +228,45 @@ namespace JoystickMerger.Generator
                 ResumeLayout(true);
             }
         }
+
+        private IEnumerable<IMapItem> GetMapItems()
+        {
+            for (int i = 0; i < RowCount; i++)
+            {
+                var item = GetControlFromPosition(0, i) as IMapItem;
+                if (item != null)
+                    yield return item;
+            }
+        }
+        public void Initialize(CompileInfo info)
+        {
+            foreach (var item in GetMapItems())
+                item.Initialize(info);
+        }
+
+        public void Declaration(CompileInfo info, System.IO.StreamWriter file)
+        {
+            foreach (var item in GetMapItems())
+                item.Declaration(info, file);
+        }
+
+
+        public void PreFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            foreach (var item in GetMapItems())
+                item.PreFeed(info, file);
+        }
+
+        public void Feed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            foreach (var item in GetMapItems())
+                item.Feed(info, file);
+        }
+
+        public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            foreach (var item in GetMapItems())
+                item.PostFeed(info, file);
+        }
     }
 }

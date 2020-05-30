@@ -10,5 +10,10 @@ namespace JoystickMerger.Generator
     {
         void ToXml(System.Xml.XmlNode parentNode);
         void FromXml(System.Xml.XmlNode node);
+        void Initialize(CompileInfo info);
+        void Declaration(CompileInfo info, System.IO.StreamWriter file);
+        void PreFeed(CompileInfo info, System.IO.StreamWriter file);
+        void Feed(CompileInfo info, System.IO.StreamWriter file);
+        void PostFeed(CompileInfo info, System.IO.StreamWriter file);
     }
 }

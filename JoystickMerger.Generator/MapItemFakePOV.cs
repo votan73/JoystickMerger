@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
-    public partial class MapItemFakePOV : MapItemBase, IMapItem
+    partial class MapItemFakePOV : MapItemBase, IMapItem
     {
         public static string TagName = "FakePOV";
         public static string DisplayText = "Fake POV";
@@ -20,7 +20,7 @@ namespace JoystickMerger.Generator
             InitializeComponent();
         }
 
-        public string FromJoystick { get { return dropDownJoystick.SelectedKey; } set { dropDownJoystick.SelectedKey = value; } }
+        public string JoystickAxis { get { return dropDownJoystick.SelectedKey; } set { dropDownJoystick.SelectedKey = value; } }
         public bool IsXDirection { get { return rbAxisX.Checked; } set { rbAxisX.Checked = value; } }
         public string VJoyPOV { get { return dropDownVJoy.SelectedKey; } set { dropDownVJoy.SelectedKey = value; } }
 
@@ -37,6 +37,34 @@ namespace JoystickMerger.Generator
             dropDownJoystick.SelectedKey = node.GetAttribute("joystick");
             IsXDirection = node.GetAttribute("direction") != "y";
             dropDownVJoy.SelectedKey = node.GetAttribute("vjoy");
+        }
+
+        public void Initialize(CompileInfo info)
+        {
+            info.RegisterJoystick(JoystickAxis);
+            info.RegisterPOV(VJoyPOV);
+        }
+
+        public void Declaration(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void PreFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void Feed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            file.Write(new string(' ', info.IndentLevel * 4));
+            var parts = JoystickAxis.Split('.');
+            file.Write("iReport."); file.Write(VJoyPOV); file.Write(" = FakePOV_"); file.Write(IsXDirection ? "X" : "Y"); file.Write("(");
+            file.Write("iReport."); file.Write(VJoyPOV);
+            file.Write(", ");
+            file.Write(JoystickAxis.Replace("joystick", "state")); file.WriteLine(");");
+        }
+
+        public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
         }
     }
 }

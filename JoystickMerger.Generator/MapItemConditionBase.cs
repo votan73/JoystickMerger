@@ -22,6 +22,12 @@ namespace JoystickMerger.Generator
             this.Height = tableLayoutPanel1.Height;
         }
 
+        public string Joystick
+        {
+            get { return dropDownJoystick1.SelectedJoystick; }
+            set { dropDownJoystick1.SelectedJoystick = value; }
+        }
+
         protected string IfTrueLabelText
         {
             get { return label4.Text; }

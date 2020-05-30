@@ -15,6 +15,7 @@ namespace JoystickMerger.Generator
             this.Name = name;
         }
         public DeviceInstance Device;
+        public string Key;
 
         public string Name;
         public override string ToString()

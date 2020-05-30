@@ -36,9 +36,10 @@
             this.BtnLoad = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openXmlFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.deviceList1 = new JoystickMerger.Generator.DeviceList();
+            this.saveExeFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.RootLevel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +62,7 @@
             this.mapLevel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel1.Location = new System.Drawing.Point(0, 0);
             this.mapLevel1.Name = "mapLevel1";
+            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -141,9 +143,9 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Mapping: (Click plus for more)";
             // 
-            // openFileDialog1
+            // openXmlFileDialog
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openXmlFileDialog.FileName = "openFileDialog1";
             // 
             // deviceList1
             // 
@@ -154,6 +156,10 @@
             this.deviceList1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
             this.deviceList1.TabIndex = 3;
             this.deviceList1.Validated += new System.EventHandler(this.checkedListBox1_Validated);
+            // 
+            // saveExeFileDialog
+            // 
+            this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
             // 
             // MainForm
             // 
@@ -187,8 +193,9 @@
         private System.Windows.Forms.Button BtnGenerate;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button BtnLoad;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveXmlFileDialog;
+        private System.Windows.Forms.OpenFileDialog openXmlFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveExeFileDialog;
 
     }
 }

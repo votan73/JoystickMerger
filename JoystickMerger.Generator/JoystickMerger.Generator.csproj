@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="CompileInfo.cs" />
     <Compile Include="DataListDropDown.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -90,6 +91,7 @@
     <Compile Include="DropDownVJoyPOV.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Generator.cs" />
     <Compile Include="IMapItem.cs" />
     <Compile Include="JoyKeyValue.cs" />
     <Compile Include="JoyKeyValueDropDown.cs">

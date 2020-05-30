@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
-    public partial class MapItemPOV : MapItemBase, IMapItem
+    partial class MapItemPOV : MapItemBase, IMapItem
     {
         public static string TagName = "POV";
         public static string DisplayText = "POV";
@@ -36,6 +36,32 @@ namespace JoystickMerger.Generator
             JoystickPOV = node.GetAttribute("joystick");
             //Inverted = node.GetAttribute("inverted")!="false";
             VJoyPOV = node.GetAttribute("vjoy");
+        }
+
+        public void Initialize(CompileInfo info)
+        {
+            info.RegisterPOV(VJoyPOV);
+        }
+
+        public void Declaration(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+
+        public void PreFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void Feed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            file.Write(new string(' ', info.IndentLevel * 4));
+            var parts = JoystickPOV.Split('.');
+            file.Write("iReport."); file.Write(VJoyPOV); file.Write(" = (uint)"); file.Write(parts[0].Replace("joystick", "povs"));
+            file.Write("["); file.Write(Int32.Parse(parts[1].Replace("POV", "")) - 1); file.WriteLine("];");
+        }
+
+        public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
         }
     }
 }

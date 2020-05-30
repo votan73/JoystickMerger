@@ -24,9 +24,9 @@ namespace JoystickMerger.Generator
         {
             input = new DirectInput();
 
-            saveFileDialog1.SupportMultiDottedExtensions = openFileDialog1.SupportMultiDottedExtensions = true;
-            saveFileDialog1.DefaultExt = openFileDialog1.DefaultExt = "joystickmerger.xml";
-            saveFileDialog1.Filter = openFileDialog1.Filter = "Joystick Merger|*.joystickmerger.xml";
+            saveXmlFileDialog.SupportMultiDottedExtensions = openXmlFileDialog.SupportMultiDottedExtensions = true;
+            saveXmlFileDialog.DefaultExt = openXmlFileDialog.DefaultExt = "joystickmerger.xml";
+            saveXmlFileDialog.Filter = openXmlFileDialog.Filter = "Joystick Merger|*.joystickmerger.xml";
             //openFileDialog1.Filter += ";Joystick Merger Executable|*.exe";
 
             base.OnLoad(e);
@@ -128,28 +128,24 @@ namespace JoystickMerger.Generator
             this.Height = Math.Min(screen.WorkingArea.Height - 32 - this.Top, (Height - ClientSize.Height) + RootLevel.Top + mapLevel1.Height);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void BtnLoad_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (openXmlFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var xml = new System.Xml.XmlDocument();
-                var root = xml.AddElement("JoystickMerger");
-                root.SetAttribute("version", "1");
-                var joysticks = root.AddElement("Joysticks");
-                deviceList1.ToXml(joysticks);
-                var rootLevel = root.AddElement("Mapping");
-                mapLevel1.ToXml(rootLevel);
-                xml.Save(saveFileDialog1.FileName);
+                xml.Load(openXmlFileDialog.FileName);
+                RealXml(xml);
+                saveXmlFileDialog.FileName = Path.GetFileName(openXmlFileDialog.FileName);
+                saveXmlFileDialog.InitialDirectory = Path.GetDirectoryName(openXmlFileDialog.FileName);
             }
         }
 
-        private void BtnLoad_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (saveXmlFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                var xml = new System.Xml.XmlDocument();
-                xml.Load(openFileDialog1.FileName);
-                RealXml(xml);
+                var xml = WriteXml();
+                xml.Save(saveXmlFileDialog.FileName);
             }
         }
 
@@ -166,68 +162,36 @@ namespace JoystickMerger.Generator
             mapLevel1.FromXml(root.SelectSingleNode("Mapping"));
         }
 
+        private System.Xml.XmlDocument WriteXml()
+        {
+            var xml = new System.Xml.XmlDocument();
+            var root = xml.AddElement("JoystickMerger");
+            root.SetAttribute("version", "1");
+            var joysticks = root.AddElement("Joysticks");
+            deviceList1.ToXml(joysticks);
+            var rootLevel = root.AddElement("Mapping");
+            mapLevel1.ToXml(rootLevel);
+            return xml;
+        }
+
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
-            var location = System.IO.Path.GetDirectoryName(typeof(MainForm).Assembly.Location);
-            var parent = Path.GetDirectoryName(location);
-            var commonPath = Path.Combine(parent, "Common");
-            var playerPath = Path.Combine(parent, "JoystickMerger.Feeder");
-            var packagesPath = Path.Combine(parent, "packages");
-
-            if (!Directory.Exists(commonPath))
-            {
-                MessageBox.Show(String.Concat("Path \"", commonPath, "\" missing."), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (!Directory.Exists(playerPath))
-            {
-                MessageBox.Show(String.Concat("Path \"", playerPath, "\" missing."), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (!Directory.Exists(packagesPath))
-            {
-                MessageBox.Show(String.Concat("Path \"", packagesPath, "\" missing."), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            using (var temp = new System.CodeDom.Compiler.TempFileCollection(System.IO.Path.Combine(location, "Build"), true))
-            {
-                CopyFolder(commonPath, temp.TempDir);
-                CopyFolder(playerPath, temp.TempDir);
-                CopyFolder(packagesPath, temp.TempDir);
-                var process = new System.Diagnostics.Process();
-                process.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(typeof(GC).Assembly.Location), "MSBuild.exe");
-                process.StartInfo.WorkingDirectory = Path.Combine(temp.TempDir, "JoystickMerger.Feeder");
-                process.StartInfo.Arguments = "JoystickMerger.Feeder.csproj /p:\"Configuration=Release\" /p:\"Platform=x64\"";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.Start();
-
-                var output = process.StandardOutput.ReadToEnd();
-                var err = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                if (process.ExitCode == 0)
-                    MessageBox.Show("Build successfully completed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else
-                    MessageBox.Show("Build failed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                //%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe DualT16000M.csproj /p:"Configuration=Release" /p:"Platform=x64"
-            }
-        }
-        private void CopyFolder(string SourcePath, string DestinationPath)
-        {
-            if (SourcePath == DestinationPath)
+            if (saveExeFileDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
 
-            int indexSrc = Path.GetDirectoryName(SourcePath).Length + 1;
-
-            foreach (var path in Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories))
+            using (var generator = new Generator())
             {
-                var dest = System.IO.Path.Combine(DestinationPath, path.Substring(indexSrc));
-                Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                File.Copy(path, dest, true);
+                try
+                {
+                    if (generator.Build(deviceList1, mapLevel1))
+                        MessageBox.Show("Build successfully completed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    else
+                        MessageBox.Show("Build failed.\n" + generator.Output, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

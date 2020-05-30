@@ -7,10 +7,12 @@ using SharpDX.DirectInput;
 using System.Windows.Forms;
 using vJoyInterfaceWrap;
 
+// This file is generated with JoystickMerger.Generator. Do not edit.
 namespace JoystickMerger.Feeder
 {
     partial class GameDevPoller
     {
+        // vJoy device number.
         const uint id = 1;
         const int numDevices = 2;
 
@@ -94,7 +96,6 @@ namespace JoystickMerger.Feeder
             // joystick povs1
             var povs1 = state1.PointOfViewControllers;
 
-            // poll the joystick
             joystickDevice2.Poll();
             // update the joystick state2 field
             var state2 = joystickDevice2.GetCurrentState();
@@ -103,18 +104,13 @@ namespace JoystickMerger.Feeder
 
             //
             //iReport.AxisZRot = (int)(state1.RotationZ * axisScale);
-            iReport.bHats = (uint)povs1[0]; // Neutral state1
+            iReport.bHats = (uint)povs1[0];
             iReport.bHatsEx1 = FakePOV_X(iReport.bHatsEx1, state1.RotationZ);
-
             iReport.Buttons |= ButtonMapper.From(state1.Buttons, 16);
-
             iReport.AxisXRot = (int)(DeadZone((65536 - state2.Y), deadzone2) * axisScale);
             iReport.AxisYRot = (int)(DeadZone(state2.RotationZ, deadzone2) * axisScale);
-
             iReport.bHatsEx2 = (uint)povs2[0]; // Neutral state2
-
             iReport.Buttons |= ButtonMapper.From(state2.Buttons, 16, 16);
-
             if (buttonToggle1.Check(state1.Buttons[15]))
             {
                 iReport.AxisX = (int)(DeadZone(state1.X, deadzone1) * axisScale);

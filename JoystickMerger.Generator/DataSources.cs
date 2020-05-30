@@ -19,8 +19,9 @@ namespace JoystickMerger.Generator
                 new JoyKeyValue("AxisYRot", "AxisYRot"),
                 new JoyKeyValue("AxisZRot", "AxisZRot"),
                 //new JoyKeyValue("Buttons", "Buttons"),
-                new JoyKeyValue("Dial", "Dial"),
-                new JoyKeyValue("Slider", "Slider"),
+                new JoyKeyValue("AxisSL0", "Slider"),
+                new JoyKeyValue("AxisSL1", "Dial"),
+                new JoyKeyValue("AxisWHL", "Wheel"),
             };
 
             VJoyPOVs = new JoyKeyValue[] {
@@ -71,6 +72,7 @@ namespace JoystickMerger.Generator
             Joysticks.Clear();
             foreach (var item in items)
             {
+                item.Key = "joystick" + count;
                 Joysticks.Add(item);
 
                 foreach (var prop in JoystickPOVTemplate)

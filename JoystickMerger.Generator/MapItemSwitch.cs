@@ -41,5 +41,65 @@ namespace JoystickMerger.Generator
             IfTrueSayText = node.GetAttribute("onText");
             IfTrueMappings.FromXml(node.SelectSingleNode("On"));
         }
+
+        public void Initialize(CompileInfo info)
+        {
+            buttonName = null;
+            info.RegisterVJoyButton(Button);
+            IfFalseMappings.Initialize(info);
+            IfTrueMappings.Initialize(info);
+        }
+
+        string buttonName;
+        public void Declaration(CompileInfo info, System.IO.StreamWriter file)
+        {
+            buttonName = "switch" + info.RegisterIndex(this);
+
+            file.Write("        Switch ");
+            file.Write(buttonName);
+            file.Write(" = new Switch()");
+            if (String.IsNullOrEmpty(IfFalseSayText) && String.IsNullOrEmpty(IfTrueSayText))
+                file.WriteLine(";");
+            else
+            {
+                file.WriteLine();
+                file.WriteLine("        {");
+                file.WriteLine("            OnStateChanged = (button) =>");
+                file.WriteLine("            {");
+                file.WriteLine("                if (button.State)");
+                if (String.IsNullOrEmpty(IfTrueSayText))
+                    file.WriteLine("                    { }");
+                else
+                {
+                    file.Write("                    Say(\"");
+                    file.Write(IfTrueSayText);
+                    file.WriteLine("\");");
+                }
+                file.WriteLine("                else");
+                if (String.IsNullOrEmpty(IfFalseSayText))
+                    file.WriteLine("                    { }");
+                else
+                {
+                    file.Write("                    Say(\"");
+                    file.Write(IfFalseSayText);
+                    file.WriteLine("\");");
+                }
+                file.WriteLine("            }");
+                file.WriteLine("        };");
+            }
+        }
+
+        public void PreFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void Feed(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            buttonName = null;
+        }
     }
 }

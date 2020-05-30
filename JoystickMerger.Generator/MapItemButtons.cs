@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
-    public partial class MapItemButtons : MapItemBase, IMapItem
+    partial class MapItemButtons : MapItemBase, IMapItem
     {
         public static string TagName = "Buttons";
         public static string DisplayText = "Buttons";
@@ -88,7 +88,6 @@ namespace JoystickMerger.Generator
             node.SetAttribute("mapTo", (MapTo - 1).ToString());
         }
 
-
         public void FromXml(System.Xml.XmlNode node)
         {
             isInUpdate = true;
@@ -102,6 +101,52 @@ namespace JoystickMerger.Generator
                 MapTo = value + 1;
             UpdateEndAt();
             isInUpdate = false;
+        }
+
+        public void Initialize(CompileInfo info)
+        {
+            info.RegisterJoystick(Joystick);
+            info.RegisterVJoyButton(Convert.ToInt32(NumVJoyEndAt.Value));
+        }
+
+        public void Declaration(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void PreFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
+        }
+
+        public void Feed(CompileInfo info, System.IO.StreamWriter file)
+        {
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.Write("iReport.Buttons |= ButtonMapper.From(");
+            file.Write(Joystick.Replace("joystick", "state"));
+            file.Write(".Buttons, ");
+            if (From > 1)
+            {
+                file.Write(From - 1);
+                file.Write(", ");
+                file.Write(Range);
+                file.Write(", ");
+                file.Write(MapTo - 1);
+            }
+            else
+            {
+                if (MapTo > 1)
+                {
+                    file.Write(Range);
+                    file.Write(", ");
+                    file.Write(MapTo - 1);
+                }
+                else
+                    file.Write(Range);
+            }
+            file.WriteLine(");");
+        }
+
+        public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
+        {
         }
     }
 }

@@ -75,7 +75,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>CS0649</NoWarn>
+    <NoWarn>0649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

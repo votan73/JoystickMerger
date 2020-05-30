@@ -33,14 +33,14 @@ namespace JoystickMerger.Generator
                 lookup.Clear();
                 if (value != null)
                     foreach (DeviceItem item in value)
-                        lookup[item.Name] = item;
+                        lookup[item.Key] = item;
                 base.DataList = value;
             }
         }
 
         public String SelectedJoystick
         {
-            get { return SelectedItem != null ? (SelectedItem as DeviceItem).Name : ""; }
+            get { return SelectedItem != null ? (SelectedItem as DeviceItem).Key : ""; }
             set
             {
                 DeviceItem selected;
