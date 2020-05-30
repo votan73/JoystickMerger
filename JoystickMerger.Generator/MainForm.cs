@@ -183,7 +183,7 @@ namespace JoystickMerger.Generator
             {
                 try
                 {
-                    if (generator.Build(deviceList1, mapLevel1))
+                    if (generator.Build(saveExeFileDialog.FileName, deviceList1, mapLevel1))
                         MessageBox.Show("Build successfully completed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
                         MessageBox.Show("Build failed.\n" + generator.Output, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);

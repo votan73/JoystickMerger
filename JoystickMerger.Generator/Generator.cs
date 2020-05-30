@@ -33,11 +33,32 @@ namespace JoystickMerger.Generator
             lookup["AxisPOV"] = "bool AxisPOV = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_POV);";
         }
 
-        public bool Build(params IMapItem[] items)
+        public bool Build(string exeFilename, params IMapItem[] items)
         {
             var location = GetLocation();
             CopyTemplateToTempFolder(location);
 
+            var project = new System.Xml.XmlDocument();
+            var projectPath = Path.Combine(TempDir, "JoystickMerger.Feeder", "JoystickMerger.Feeder.csproj");
+            project.Load(projectPath);
+            foreach (System.Xml.XmlNode node in project.DocumentElement)
+            {
+                if (node.Name == "PropertyGroup" /*&& node.GetAttribute("Condition") == "'$(Configuration)|$(Platform)' == 'Release|x64'"*/)
+                {
+                    foreach (System.Xml.XmlNode propNode in node.ChildNodes)
+                    {
+                        if (propNode.Name == "OutputPath")
+                        {
+                            propNode.InnerText = Path.GetDirectoryName(exeFilename);
+                        }
+                        else if (propNode.Name == "AssemblyName")
+                        {
+                            propNode.InnerText = Path.GetFileNameWithoutExtension(exeFilename);
+                        }
+                    }
+                }
+            }
+            project.Save(projectPath);
 
             var info = new CompileInfo();
             foreach (var item in items)
