@@ -52,7 +52,7 @@ namespace JoystickMerger.Generator
         public void Initialize(CompileInfo info)
         {
             info.RegisterJoystick(Joystick);
-            //info.RegisterVJoyAxis(Convert.ToInt32(NumVJoyEndAt.Value));
+            info.RegisterVJoyAxis(VJoyAxis);
         }
 
         public void Declaration(CompileInfo info, System.IO.StreamWriter file)
@@ -70,11 +70,11 @@ namespace JoystickMerger.Generator
 
             file.Write(new string(' ', info.IndentLevel * 4));
             file.Write("iReport."); file.Write(VJoyAxis);
-            file.Write(" = (int)");
+            file.Write(" = ");
             file.Write(Joystick.Replace("joystick", "state"));
             file.Write(".Sliders[");
             file.Write(Pos - 1);
-            file.Write("];");
+            file.WriteLine("];");
         }
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)

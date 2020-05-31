@@ -31,7 +31,7 @@
             this.DropDownJoystick = new JoystickMerger.Generator.DropDownJoystick();
             this.NumJoystickPos = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.DropDownVJoy = new JoystickMerger.Generator.DropDownVJoySliders();
+            this.DropDownVJoy = new JoystickMerger.Generator.DropDownVJoyAxis();
             this.ItemsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumJoystickPos)).BeginInit();
             this.SuspendLayout();
@@ -110,6 +110,6 @@
         private DropDownJoystick DropDownJoystick;
         private System.Windows.Forms.NumericUpDown NumJoystickPos;
         private System.Windows.Forms.Label label1;
-        private DropDownVJoySliders DropDownVJoy;
+        private DropDownVJoyAxis DropDownVJoy;
     }
 }

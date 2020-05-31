@@ -27,9 +27,9 @@ namespace JoystickMerger.Generator
             lookup["AxisXRot"] = "bool AxisXRot = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RX);";
             lookup["AxisYRot"] = "bool AxisYRot = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RY);";
             lookup["AxisZRot"] = "bool AxisZRot = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RZ);";
-            lookup["AxisSL0"] = "bool AxisSL0 = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL0);";
-            lookup["AxisSL1"] = "bool AxisSL1 = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL1);";
-            lookup["AxisWHL"] = "bool AxisWHL = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_WHL);";
+            lookup["Slider"] = "bool Slider = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL0);";
+            lookup["Dial"] = "bool Dial = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL1);";
+            lookup["Wheel"] = "bool Wheel = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_WHL);";
             lookup["AxisPOV"] = "bool AxisPOV = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_POV);";
         }
 

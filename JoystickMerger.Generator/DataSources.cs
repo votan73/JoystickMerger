@@ -18,7 +18,9 @@ namespace JoystickMerger.Generator
                 new JoyKeyValue("AxisXRot", "AxisXRot"),
                 new JoyKeyValue("AxisYRot", "AxisYRot"),
                 new JoyKeyValue("AxisZRot", "AxisZRot"),
-                //new JoyKeyValue("Buttons", "Buttons"),
+                new JoyKeyValue("Slider", "Slider"),
+                new JoyKeyValue("Dial", "Dial"),
+                new JoyKeyValue("Wheel", "Wheel"),
             };
             VJoyPOVs = new JoyKeyValue[] {
                 new JoyKeyValue("bHats", "POV 1"),
