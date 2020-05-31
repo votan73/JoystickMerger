@@ -91,7 +91,7 @@
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Dual T.16000M";
+            this.Text = "Joystick Merger Feeder";
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

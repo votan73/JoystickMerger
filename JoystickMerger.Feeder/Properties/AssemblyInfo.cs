@@ -3,5 +3,5 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("JoystickMerger Dual T.16000M")]
-[assembly: AssemblyProduct("DualT16000M")]
+[assembly: AssemblyTitle("Joystick Merger Feeder")]
+[assembly: AssemblyProduct("JoystickMerger.Feeder")]
