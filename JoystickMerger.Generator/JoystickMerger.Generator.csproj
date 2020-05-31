@@ -91,6 +91,9 @@
     <Compile Include="DropDownVJoyPOV.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DropDownVJoySliders.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Generator.cs" />
     <Compile Include="IMapItem.cs" />
     <Compile Include="JoyKeyValue.cs" />
@@ -168,6 +171,15 @@
     </Compile>
     <EmbeddedResource Include="MapItemPOV.resx">
       <DependentUpon>MapItemPOV.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="MapItemSliders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapItemSliders.Designer.cs">
+      <DependentUpon>MapItemSliders.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MapItemSliders.resx">
+      <DependentUpon>MapItemSliders.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="MapItemSwitch.cs">
       <SubType>UserControl</SubType>

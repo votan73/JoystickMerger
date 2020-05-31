@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.SliderDeadzone = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,7 +42,6 @@
             this.checkBox1.Size = new System.Drawing.Size(187, 21);
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -95,7 +94,7 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label checkBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar SliderDeadzone;
         private System.Windows.Forms.Label label2;

@@ -55,6 +55,9 @@ namespace JoystickMerger.Generator
 
         public void Feed(CompileInfo info, System.IO.StreamWriter file)
         {
+            if (String.IsNullOrEmpty(JoystickAxis))
+                return;
+
             file.Write(new string(' ', info.IndentLevel * 4));
             var parts = JoystickAxis.Split('.');
             file.Write("iReport."); file.Write(VJoyPOV); file.Write(" = FakePOV_"); file.Write(IsXDirection ? "X" : "Y"); file.Write("(");

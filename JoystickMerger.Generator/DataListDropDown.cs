@@ -15,6 +15,7 @@ namespace JoystickMerger.Generator
             base.ValueMember = "Key";
             base.DisplayMember = "Value";
             base.DropDownStyle = ComboBoxStyle.DropDownList;
+            MaxDropDownItems = 12;
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -43,5 +44,9 @@ namespace JoystickMerger.Generator
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [DefaultValue("Value"), EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember { get { return base.DisplayMember; } set { base.DisplayMember = value; } }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DefaultValue(12), EditorBrowsable(EditorBrowsableState.Never)]
+        public new int MaxDropDownItems { get { return base.MaxDropDownItems; } set { base.MaxDropDownItems = value; } }
     }
 }

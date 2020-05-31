@@ -56,6 +56,7 @@ namespace JoystickMerger.Generator
             base.Dock = DockStyle.Top;
             this.SetAutoSizeMode(System.Windows.Forms.AutoSizeMode.GrowAndShrink);
             this.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             base.AutoSize = true;
             this.DoubleBuffered = true;
 
@@ -84,6 +85,10 @@ namespace JoystickMerger.Generator
         public new Size Size { get { return base.Size; } set { base.Size = value; } }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
         public new DockStyle Dock { get { return base.Dock; } set { base.Dock = value; } }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
+        public new TableLayoutRowStyleCollection RowStyles { get { return base.RowStyles; } }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
+        public new TableLayoutColumnStyleCollection ColumnStyles { get { return base.ColumnStyles; } }
 
         protected override void OnHandleCreated(EventArgs e)
         {

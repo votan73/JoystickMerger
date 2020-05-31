@@ -19,16 +19,17 @@ namespace JoystickMerger.Generator
                 new JoyKeyValue("AxisYRot", "AxisYRot"),
                 new JoyKeyValue("AxisZRot", "AxisZRot"),
                 //new JoyKeyValue("Buttons", "Buttons"),
-                new JoyKeyValue("AxisSL0", "Slider"),
-                new JoyKeyValue("AxisSL1", "Dial"),
-                new JoyKeyValue("AxisWHL", "Wheel"),
             };
-
             VJoyPOVs = new JoyKeyValue[] {
                 new JoyKeyValue("bHats", "POV 1"),
                 new JoyKeyValue("bHatsEx1", "POV 2"),
                 new JoyKeyValue("bHatsEx2", "POV 3"),
                 new JoyKeyValue("bHatsEx3", "POV 4"),
+            };
+            VJoySliders = new JoyKeyValue[]{
+                new JoyKeyValue("Slider", "Slider"),
+                new JoyKeyValue("Dial", "Dial"),
+                new JoyKeyValue("Wheel", "Wheel"),
             };
 
             JoystickPOVTemplate = new JoyKeyValue[] {
@@ -43,8 +44,6 @@ namespace JoystickMerger.Generator
                 new JoyKeyValue("RotationX", "RotationX"),
                 new JoyKeyValue("RotationY", "RotationY"),
                 new JoyKeyValue("RotationZ", "RotationZ"),
-                new JoyKeyValue("Slider1", "Slider1"),
-                new JoyKeyValue("Slider2", "Slider2"), 
                 new JoyKeyValue("TorqueX", "TorqueX"),
                 new JoyKeyValue("TorqueY", "TorqueY"),
                 new JoyKeyValue("TorqueZ", "TorqueZ"),
@@ -56,10 +55,11 @@ namespace JoystickMerger.Generator
             };
         }
         private static JoyKeyValue[] JoystickPOVTemplate;
-        private static JoyKeyValue[] JoystickAxisTemplate;
+        public static JoyKeyValue[] JoystickAxisTemplate;
 
-        public static JoyKeyValue[] VJoyAxis;
-        public static JoyKeyValue[] VJoyPOVs;
+        public static readonly JoyKeyValue[] VJoyAxis;
+        public static readonly JoyKeyValue[] VJoyPOVs;
+        public static readonly JoyKeyValue[] VJoySliders;
         public static readonly BindingList<JoyKeyValue> JoystickPOV = new BindingList<JoyKeyValue>();
         public static readonly BindingList<JoyKeyValue> JoystickAxis = new BindingList<JoyKeyValue>();
         public static readonly BindingList<DeviceItem> Joysticks = new BindingList<DeviceItem>();

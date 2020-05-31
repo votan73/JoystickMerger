@@ -95,6 +95,29 @@ namespace JoystickMerger.Generator
 
         public void Feed(CompileInfo info, System.IO.StreamWriter file)
         {
+            if (String.IsNullOrEmpty(Joystick))
+                return;
+
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.Write("if ("); file.Write(buttonName); file.Write(".Check("); file.Write(Joystick.Replace("joystick", "state")); file.Write(".Buttons["); file.Write(Button - 1); file.WriteLine("]))");
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.WriteLine("{");
+
+            info.IndentLevel++;
+            IfFalseMappings.Feed(info, file);
+            info.IndentLevel--;
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.WriteLine("}");
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.WriteLine("else");
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.WriteLine("{");
+
+            info.IndentLevel++;
+            IfTrueMappings.Feed(info, file);
+            info.IndentLevel--;
+            file.Write(new string(' ', info.IndentLevel * 4));
+            file.WriteLine("}");
         }
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)

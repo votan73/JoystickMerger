@@ -64,11 +64,11 @@ namespace JoystickMerger.Generator
             if (list.Count > 0)
             {
                 foreach (var item in list)
-                    deviceList1.Controls.Add(new DeviceListItem() { Item = item, Checked = true });
+                    deviceList1.Controls.Add(new DeviceListItem() { Item = item });
             }
             else
                 deviceList1.Controls.Add(new Label() { Text = "No Controller found.", Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right, });
-            checkedListBox1_Validated(null, null);
+            UpdateDeviceDropDown(null, null);
 
             mapLevel1.SuspendLayout();
             try
@@ -116,9 +116,9 @@ namespace JoystickMerger.Generator
         public static Font BiggerFont;
         DirectInput input;
 
-        private void checkedListBox1_Validated(object sender, EventArgs e)
+        private void UpdateDeviceDropDown(object sender, EventArgs e)
         {
-            DataSources.CreateDataSources(deviceList1.Controls.OfType<DeviceListItem>().Where<DeviceListItem>(x => x.Checked).Select<DeviceListItem, DeviceItem>(x => x.Item));
+            DataSources.CreateDataSources(deviceList1.Controls.OfType<DeviceListItem>().Select<DeviceListItem, DeviceItem>(x => x.Item));
         }
 
         private void mapLevel1_Resize(object sender, EventArgs e)
@@ -193,6 +193,24 @@ namespace JoystickMerger.Generator
                     MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            var highest = DateTime.MinValue;
+            DeviceListItem highestItem = null;
+            foreach (var item in deviceList1.Items)
+            {
+                if (item.LastChangeDectection > highest)
+                {
+                    highest = item.LastChangeDectection;
+                    highestItem = item;
+                }
+            }
+            if (highestItem != null)
+                label3.Text = String.Concat(highestItem.Item.Name, " ", highestItem.ChangeType, " ", highestItem.ChangeValue);
+            else
+                label3.Text = "-";
         }
     }
 }

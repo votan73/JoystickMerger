@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.RootLevel = new System.Windows.Forms.Panel();
             this.mapLevel1 = new JoystickMerger.Generator.MapLevel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.BtnGenerate = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.BtnLoad = new System.Windows.Forms.Button();
@@ -38,8 +40,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openXmlFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.deviceList1 = new JoystickMerger.Generator.DeviceList();
             this.saveExeFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.deviceList1 = new JoystickMerger.Generator.DeviceList();
             this.RootLevel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +50,6 @@
             // RootLevel
             // 
             this.RootLevel.AutoScroll = true;
-            this.RootLevel.BackColor = System.Drawing.Color.Transparent;
             this.RootLevel.Controls.Add(this.mapLevel1);
             this.RootLevel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootLevel.Location = new System.Drawing.Point(0, 66);
@@ -58,31 +60,14 @@
             // mapLevel1
             // 
             this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapLevel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel1.Location = new System.Drawing.Point(0, 0);
             this.mapLevel1.Name = "mapLevel1";
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel1.TabIndex = 1;
             this.mapLevel1.Resize += new System.EventHandler(this.mapLevel1_Resize);
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.BtnGenerate);
             this.panel1.Controls.Add(this.btnSave);
             this.panel1.Controls.Add(this.BtnLoad);
@@ -91,6 +76,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(624, 32);
             this.panel1.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(304, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "label3";
             // 
             // BtnGenerate
             // 
@@ -129,9 +123,9 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Location = new System.Drawing.Point(0, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(123, 13);
+            this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Select controllers to use:";
+            this.label1.Text = "Controllers to use:";
             // 
             // label2
             // 
@@ -147,6 +141,16 @@
             // 
             this.openXmlFileDialog.FileName = "openFileDialog1";
             // 
+            // saveExeFileDialog
+            // 
+            this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // deviceList1
             // 
             this.deviceList1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
@@ -155,11 +159,6 @@
             this.deviceList1.Name = "deviceList1";
             this.deviceList1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
             this.deviceList1.TabIndex = 3;
-            this.deviceList1.Validated += new System.EventHandler(this.checkedListBox1_Validated);
-            // 
-            // saveExeFileDialog
-            // 
-            this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
             // 
             // MainForm
             // 
@@ -177,6 +176,7 @@
             this.RootLevel.ResumeLayout(false);
             this.RootLevel.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,6 +196,8 @@
         private System.Windows.Forms.SaveFileDialog saveXmlFileDialog;
         private System.Windows.Forms.OpenFileDialog openXmlFileDialog;
         private System.Windows.Forms.SaveFileDialog saveExeFileDialog;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Timer timer1;
 
     }
 }

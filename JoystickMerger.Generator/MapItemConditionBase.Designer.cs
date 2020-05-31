@@ -83,23 +83,9 @@
             // mapLevel2
             // 
             this.mapLevel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapLevel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel2.Location = new System.Drawing.Point(3, 231);
             this.mapLevel2.MinimumSize = new System.Drawing.Size(0, 96);
             this.mapLevel2.Name = "mapLevel2";
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel2.TabIndex = 4;
             // 
             // panel2
@@ -181,22 +167,9 @@
             // mapLevel1
             // 
             this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapLevel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel1.Location = new System.Drawing.Point(3, 81);
             this.mapLevel1.MinimumSize = new System.Drawing.Size(0, 96);
             this.mapLevel1.Name = "mapLevel1";
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mapLevel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mapLevel1.TabIndex = 2;
             // 
             // panel3

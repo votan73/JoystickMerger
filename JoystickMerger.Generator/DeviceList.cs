@@ -29,6 +29,8 @@ namespace JoystickMerger.Generator
         public new int ColumnCount { get { return base.ColumnCount; } set { base.ColumnCount = 1; } }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
         public new Size Size { get { return base.Size; } set { base.Size = value; } }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
+        public new TableLayoutRowStyleCollection RowStyles { get { return base.RowStyles; } }
 
         protected override void OnControlAdded(ControlEventArgs e)
         {
@@ -47,7 +49,7 @@ namespace JoystickMerger.Generator
 
         public void ToXml(System.Xml.XmlNode joysticks)
         {
-            foreach (var item in this.Controls.OfType<DeviceListItem>().Where<DeviceListItem>(x => x.Checked))
+            foreach (var item in Items)
             {
                 var joystick = joysticks.AddElement("Joystick");
                 joystick.SetAttribute("name", item.Item.Name);
@@ -55,6 +57,8 @@ namespace JoystickMerger.Generator
                 joystick.SetAttribute("deadzone", item.DeadZone.ToString(System.Globalization.CultureInfo.GetCultureInfo(9)));
             }
         }
+
+        public IEnumerable<DeviceListItem> Items { get { return this.Controls.OfType<DeviceListItem>(); } }
 
         public void FromXml(System.Xml.XmlNode joysticks)
         {
@@ -66,7 +70,7 @@ namespace JoystickMerger.Generator
             };
 
             var list = new HashSet<System.Xml.XmlNode>(joysticks.ChildNodes.Cast<System.Xml.XmlNode>().Where<System.Xml.XmlNode>(x => x.Name == "Joystick"));
-            var items = new List<DeviceListItem>(this.Controls.OfType<DeviceListItem>());
+            var items = new List<DeviceListItem>(Items);
             for (int i = items.Count - 1; i >= 0; i--)
             {
                 var item = items[i];
@@ -109,7 +113,7 @@ namespace JoystickMerger.Generator
             file.WriteLine(";");
 
             var nameToDevice = new Dictionary<string, DeviceListItem>();
-            foreach (var device in this.Controls.OfType<DeviceListItem>())
+            foreach (var device in Items)
                 nameToDevice[device.Item.Key] = device;
             file.WriteLine();
 
@@ -146,7 +150,7 @@ namespace JoystickMerger.Generator
         private void FindDevices(CompileInfo info, System.IO.StreamWriter file)
         {
             var nameToDevice = new Dictionary<string, DeviceListItem>();
-            foreach (var device in this.Controls.OfType<DeviceListItem>())
+            foreach (var device in Items)
                 nameToDevice[device.Item.Key] = device;
 
             file.WriteLine("        private void FindDevices(IList<DeviceInstance> gameControllerList, IdentifierList preferred)");
@@ -226,7 +230,10 @@ namespace JoystickMerger.Generator
             var list = new List<string>();
             foreach (var joystick in info.Joysticks)
                 list.Add(String.Concat(joystick.Replace("joystick", "joystickDevice"), " != null"));
-            file.Write(String.Join(" && ", list));
+            if (list.Count > 0)
+                file.Write(String.Join(" && ", list));
+            else
+                file.Write("false");
             file.WriteLine(";");
             file.WriteLine("        }");
             file.WriteLine();

@@ -119,6 +119,9 @@ namespace JoystickMerger.Generator
 
         public void Feed(CompileInfo info, System.IO.StreamWriter file)
         {
+            if (String.IsNullOrEmpty(Joystick))
+                return;
+
             file.Write(new string(' ', info.IndentLevel * 4));
             file.Write("iReport.Buttons |= ButtonMapper.From(");
             file.Write(Joystick.Replace("joystick", "state"));

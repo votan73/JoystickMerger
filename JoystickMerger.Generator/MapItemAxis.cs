@@ -55,6 +55,9 @@ namespace JoystickMerger.Generator
 
         public void Feed(CompileInfo info, System.IO.StreamWriter file)
         {
+            if (String.IsNullOrEmpty(JoystickAxis))
+                return;
+
             var parts = JoystickAxis.Split('.');
 
             file.Write(new string(' ', info.IndentLevel * 4));
