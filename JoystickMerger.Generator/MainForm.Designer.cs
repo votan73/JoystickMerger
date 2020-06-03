@@ -41,7 +41,6 @@
             this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openXmlFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExeFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.deviceList1 = new JoystickMerger.Generator.DeviceList();
             this.RootLevel.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -145,12 +144,6 @@
             // 
             this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // deviceList1
             // 
             this.deviceList1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
@@ -197,8 +190,6 @@
         private System.Windows.Forms.OpenFileDialog openXmlFileDialog;
         private System.Windows.Forms.SaveFileDialog saveExeFileDialog;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Timer timer1;
-
     }
 }
 

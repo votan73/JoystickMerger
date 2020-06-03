@@ -195,22 +195,6 @@ namespace JoystickMerger.Generator
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            var highest = DateTime.MinValue;
-            DeviceListItem highestItem = null;
-            foreach (var item in deviceList1.Items)
-            {
-                if (item.LastChangeDectection > highest)
-                {
-                    highest = item.LastChangeDectection;
-                    highestItem = item;
-                }
-            }
-            if (highestItem != null)
-                label3.Text = String.Concat(highestItem.Item.Name, " ", highestItem.ChangeType, " ", highestItem.ChangeValue);
-            else
-                label3.Text = "-";
-        }
+        internal DeviceList DeviceList { get { return deviceList1; } }
     }
 }

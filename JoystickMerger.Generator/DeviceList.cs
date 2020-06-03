@@ -102,6 +102,21 @@ namespace JoystickMerger.Generator
             }
         }
 
+        public DeviceListItem RecentTouchedDevice()
+        {
+            var highest = DateTime.MinValue;
+            DeviceListItem highestItem = null;
+            foreach (var item in this.Items)
+            {
+                if (item.LastChangeDectection > highest)
+                {
+                    highest = item.LastChangeDectection;
+                    highestItem = item;
+                }
+            }
+            return highestItem;
+        }
+
         public void Initialize(CompileInfo info)
         {
         }

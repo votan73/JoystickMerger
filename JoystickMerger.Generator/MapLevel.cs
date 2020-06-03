@@ -68,8 +68,6 @@ namespace JoystickMerger.Generator
             //availableItems.Items.Add(new ToolStripMenuItem("Fake POV", null, addItem_Click) { Tag = typeof(MapItemFakePOV) });
             //availableItems.Items.Add(new ToolStripMenuItem("Button Toggle", null, addItem_Click) { Tag = typeof(MapItemButtonToggle) });
             //availableItems.Items.Add(new ToolStripMenuItem("Switch", null, addItem_Click) { Tag = typeof(MapItemSwitch) });
-            foreach (var mapping in mappings)
-                availableItems.Items.Add(new ToolStripMenuItem(mappingsDisplay[mapping.Value], null, addItem_Click) { Tag = mapping.Value });
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -95,6 +93,9 @@ namespace JoystickMerger.Generator
             base.OnHandleCreated(e);
             if (!DesignMode)
             {
+                availableItems.Items.Add(new ToolStripMenuItem("Auto Select...", null, autoSelect_Click));
+                foreach (var mapping in mappings)
+                    availableItems.Items.Add(new ToolStripMenuItem(mappingsDisplay[mapping.Value], null, addItem_Click) { Tag = mapping.Value });
                 addButton.Font = MainForm.BiggerFont;
                 addButton.Click += addButton_Click;
             }
@@ -120,6 +121,40 @@ namespace JoystickMerger.Generator
         void addButton_Click(object sender, EventArgs e)
         {
             availableItems.Show(addButton, new Point(0, addButton.Height));
+        }
+
+        private void autoSelect_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FindControllerPropertyDialog())
+            {
+                var deviceList = (FindForm() as MainForm).DeviceList;
+                dialog.DeviceList = deviceList;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    var item = deviceList.RecentTouchedDevice();
+                    switch (item.ChangeType)
+                    {
+                        case "Button":
+                            var buttons = AddMapItem(typeof(MapItemButtons)) as MapItemButtons;
+                            buttons.Joystick = item.Item.Key;
+                            buttons.From = Int32.Parse(item.ChangeValue);
+                            break;
+                       case "Slider":
+                            var sliders = AddMapItem(typeof(MapItemSliders)) as MapItemSliders;
+                            sliders.Joystick = item.Item.Key;
+                            sliders.Pos = Int32.Parse(item.ChangeValue);
+                            break;
+                        case "POV":
+                            var pov = AddMapItem(typeof(MapItemPOV)) as MapItemPOV;
+                            pov.JoystickPOV = item.Item.Key + "." + item.ChangeValue;
+                            break;
+                         default:
+                            var axis = AddMapItem(typeof(MapItemAxis)) as MapItemAxis;
+                            axis.JoystickAxis = item.Item.Key + "." + item.ChangeValue;
+                            break;
+                    }
+                }
+            }
         }
 
         private void addItem_Click(object sender, EventArgs e)

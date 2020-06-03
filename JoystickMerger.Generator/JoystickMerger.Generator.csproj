@@ -94,6 +94,15 @@
     <Compile Include="DropDownVJoySliders.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FindControllerPropertyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindControllerPropertyDialog.Designer.cs">
+      <DependentUpon>FindControllerPropertyDialog.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FindControllerPropertyDialog.resx">
+      <DependentUpon>FindControllerPropertyDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Generator.cs" />
     <Compile Include="IMapItem.cs" />
     <Compile Include="JoyKeyValue.cs" />
