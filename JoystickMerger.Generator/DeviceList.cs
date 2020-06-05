@@ -292,5 +292,11 @@ namespace JoystickMerger.Generator
         {
             ReleaseDevices(info, file);
         }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

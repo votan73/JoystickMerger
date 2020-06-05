@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.Button)]
     partial class MapItemSwitch : MapItemConditionBase, IMapItem
     {
         public static string TagName = "Switch";
@@ -123,6 +124,13 @@ namespace JoystickMerger.Generator
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
             buttonName = null;
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            Joystick = item.Item.Key;
+            Button = Int32.Parse(item.DetectedValue);
         }
     }
 }

@@ -22,7 +22,6 @@ namespace JoystickMerger.Generator
             if (!DesignMode)
             {
                 base.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-                BtnDelete.Font = MainForm.BoldFont;
                 BtnDelete.Click += BtnDelete_Click;
             }
             base.OnLoad(e);

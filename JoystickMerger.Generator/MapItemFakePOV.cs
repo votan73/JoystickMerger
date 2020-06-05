@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.Axis)]
     partial class MapItemFakePOV : MapItemBase, IMapItem
     {
         public static string TagName = "FakePOV";
@@ -68,6 +69,12 @@ namespace JoystickMerger.Generator
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            JoystickAxis = item.Item.Key + "." + item.DetectedValue;
         }
     }
 }

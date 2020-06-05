@@ -26,17 +26,27 @@ namespace JoystickMerger.Generator
                 base.DataList = value;
             }
         }
+        protected override void CreateHandle()
+        {
+            base.CreateHandle();
+            SelectedKey = selectedKey;
+        }
 
+        private string selectedKey;
         public String SelectedKey
         {
-            get { return SelectedItem != null ? (SelectedItem as JoyKeyValue).Key : ""; }
+            get { return IsHandleCreated ? (SelectedItem != null ? (SelectedItem as JoyKeyValue).Key : "") : selectedKey; }
             set
             {
-                JoyKeyValue selected;
-                if (lookup.TryGetValue(value ?? "", out selected))
-                    SelectedItem = selected;
-                else
-                    SelectedItem = null;
+                selectedKey = value;
+                if (IsHandleCreated)
+                {
+                    JoyKeyValue selected;
+                    if (lookup.TryGetValue(value ?? "", out selected))
+                        SelectedItem = selected;
+                    else
+                        SelectedItem = null;
+                }
             }
         }
     }

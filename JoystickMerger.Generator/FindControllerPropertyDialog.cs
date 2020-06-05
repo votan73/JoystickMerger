@@ -22,7 +22,7 @@ namespace JoystickMerger.Generator
         {
             if (!DesignMode)
             {
-                button1.Enabled = false;
+                BtnOk.Enabled = false;
                 timer1.Enabled = true;
             }
             base.OnLoad(e);
@@ -32,12 +32,12 @@ namespace JoystickMerger.Generator
         {
             var highestItem = DeviceList.RecentTouchedDevice();
             if (highestItem != null)
-                label1.Text = String.Concat(highestItem.Item.Name, " ", highestItem.ChangeType, " ", highestItem.ChangeValue);
+                label1.Text = String.Concat(highestItem.Item.Name, " ", highestItem.DetectedType, " ", highestItem.DetectedValue);
             else
             {
                 label1.Text = "-";
             }
-            button1.Enabled = highestItem != null;
+            BtnOk.Enabled = highestItem != null;
         }
 
         public DeviceList DeviceList;

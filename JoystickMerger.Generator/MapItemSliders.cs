@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.Slider)]
     partial class MapItemSliders : MapItemBase, IMapItem
     {
         public static string TagName = "Sliders";
@@ -79,6 +80,13 @@ namespace JoystickMerger.Generator
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            Joystick = item.Item.Key;
+            Pos = Int32.Parse(item.DetectedValue);
         }
     }
 }

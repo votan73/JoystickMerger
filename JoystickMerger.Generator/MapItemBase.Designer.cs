@@ -48,7 +48,8 @@
             this.BtnDelete.Size = new System.Drawing.Size(24, 24);
             this.BtnDelete.TabIndex = 3;
             this.BtnDelete.TabStop = false;
-            this.BtnDelete.Text = "×";
+            this.BtnDelete.Text = "❌";
+            this.BtnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.BtnDelete.UseVisualStyleBackColor = false;
             // 
             // BtnUp

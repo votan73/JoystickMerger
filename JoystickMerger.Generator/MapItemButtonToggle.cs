@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.Button)]
     partial class MapItemButtonToggle : MapItemConditionBase, IMapItem
     {
         public static string TagName = "ButtonToggle";
@@ -108,7 +109,7 @@ namespace JoystickMerger.Generator
             file.WriteLine("{");
 
             info.IndentLevel++;
-            IfFalseMappings.Feed(info, file);
+            IfTrueMappings.Feed(info, file);
             info.IndentLevel--;
             file.Write(new string(' ', info.IndentLevel * 4));
             file.WriteLine("}");
@@ -118,7 +119,7 @@ namespace JoystickMerger.Generator
             file.WriteLine("{");
 
             info.IndentLevel++;
-            IfTrueMappings.Feed(info, file);
+            IfFalseMappings.Feed(info, file);
             info.IndentLevel--;
             file.Write(new string(' ', info.IndentLevel * 4));
             file.WriteLine("}");
@@ -127,6 +128,13 @@ namespace JoystickMerger.Generator
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
             buttonName = null;
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            Joystick = item.Item.Key;
+            Button = Int32.Parse(item.DetectedValue);
         }
     }
 }

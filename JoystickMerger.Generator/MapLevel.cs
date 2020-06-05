@@ -12,10 +12,11 @@ namespace JoystickMerger.Generator
     class MapLevel : TableLayoutPanel, IMapItem
     {
         readonly Button addButton = new Button();
-        readonly ContextMenuStrip availableItems = new ContextMenuStrip();
+        static ContextMenuStrip availableItems;
 
         readonly static Dictionary<string, Type> mappings = new Dictionary<string, Type>();
         readonly static Dictionary<Type, string> mappingsDisplay = new Dictionary<Type, string>();
+        readonly static Dictionary<DetectionType, List<Type>> mappingsDetectionType = new Dictionary<DetectionType, List<Type>>();
 
         static MapLevel()
         {
@@ -30,6 +31,14 @@ namespace JoystickMerger.Generator
                     continue;
                 mappings[tagNameField.GetValue(null) as string] = type;
                 mappingsDisplay[type] = displayTextField.GetValue(null) as string;
+                foreach (DetectionTypeAttribute attribute in type.GetCustomAttributes(typeof(DetectionTypeAttribute), false))
+                {
+                    var detectType = attribute.DetectionType;
+                    List<Type> list;
+                    if (!mappingsDetectionType.TryGetValue(detectType, out list))
+                        mappingsDetectionType[detectType] = list = new List<Type>();
+                    list.Add(type);
+                }
             }
         }
 
@@ -39,15 +48,18 @@ namespace JoystickMerger.Generator
             base.RowCount = 1;
             base.AutoSize = true;
             addButton.Name = "Add";
-            addButton.Text = "+";
+            addButton.Text = "➕";
             addButton.Width = addButton.Height = 32;
             addButton.Anchor = AnchorStyles.Top;
+            addButton.UseVisualStyleBackColor = false;
             addButton.FlatStyle = FlatStyle.Flat;
             addButton.FlatAppearance.BorderSize = 0;
             addButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
-            addButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(224, 224, 224);
-            addButton.Font = MainForm.BoldFont;
+            addButton.FlatAppearance.MouseOverBackColor = SystemColors.Highlight;
+            addButton.TextAlign = ContentAlignment.MiddleCenter;
+            addButton.TextImageRelation = TextImageRelation.Overlay;
             addButton.BackColor = System.Drawing.Color.SteelBlue;
+            addButton.UseMnemonic = false;
             Controls.Add(addButton);
 
             this.SetColumn(addButton, 0);
@@ -58,16 +70,6 @@ namespace JoystickMerger.Generator
             this.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             base.AutoSize = true;
-            this.DoubleBuffered = true;
-
-            availableItems.RenderMode = ToolStripRenderMode.System;
-
-            //availableItems.Items.Add(new ToolStripMenuItem("Axis", null, addItem_Click) { Tag = typeof(MapItemAxis) });
-            //availableItems.Items.Add(new ToolStripMenuItem("POV", null, addItem_Click) { Tag = typeof(MapItemPOV) });
-            //availableItems.Items.Add(new ToolStripMenuItem("Buttons", null, addItem_Click) { Tag = typeof(MapItemButtons) });
-            //availableItems.Items.Add(new ToolStripMenuItem("Fake POV", null, addItem_Click) { Tag = typeof(MapItemFakePOV) });
-            //availableItems.Items.Add(new ToolStripMenuItem("Button Toggle", null, addItem_Click) { Tag = typeof(MapItemButtonToggle) });
-            //availableItems.Items.Add(new ToolStripMenuItem("Switch", null, addItem_Click) { Tag = typeof(MapItemSwitch) });
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -93,9 +95,14 @@ namespace JoystickMerger.Generator
             base.OnHandleCreated(e);
             if (!DesignMode)
             {
-                availableItems.Items.Add(new ToolStripMenuItem("Auto Select...", null, autoSelect_Click));
-                foreach (var mapping in mappings)
-                    availableItems.Items.Add(new ToolStripMenuItem(mappingsDisplay[mapping.Value], null, addItem_Click) { Tag = mapping.Value });
+                if (availableItems == null)
+                {
+                    availableItems = new ContextMenuStrip();
+                    availableItems.Items.Add(new ToolStripMenuItem("Auto Select...", null, autoSelect_Click));
+                    foreach (var mapping in mappings)
+                        availableItems.Items.Add(new ToolStripMenuItem(mappingsDisplay[mapping.Value], null, addItem_Click) { Tag = mapping.Value });
+                    availableItems.RenderMode = ToolStripRenderMode.System;
+                }
                 addButton.Font = MainForm.BiggerFont;
                 addButton.Click += addButton_Click;
             }
@@ -120,6 +127,9 @@ namespace JoystickMerger.Generator
 
         void addButton_Click(object sender, EventArgs e)
         {
+            availableItems.Tag = null;
+            foreach (ToolStripItem item in availableItems.Items)
+                item.Visible = true;
             availableItems.Show(addButton, new Point(0, addButton.Height));
         }
 
@@ -132,27 +142,59 @@ namespace JoystickMerger.Generator
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     var item = deviceList.RecentTouchedDevice();
-                    switch (item.ChangeType)
+                    List<Type> list;
+                    if (!mappingsDetectionType.TryGetValue(item.DetectedType, out list))
+                        return;
+                    ToolStripItem onlyOne = null;
+                    int count = 0;
+                    foreach (ToolStripItem menu in availableItems.Items)
                     {
-                        case "Button":
-                            var buttons = AddMapItem(typeof(MapItemButtons)) as MapItemButtons;
-                            buttons.Joystick = item.Item.Key;
-                            buttons.From = Int32.Parse(item.ChangeValue);
-                            break;
-                       case "Slider":
-                            var sliders = AddMapItem(typeof(MapItemSliders)) as MapItemSliders;
-                            sliders.Joystick = item.Item.Key;
-                            sliders.Pos = Int32.Parse(item.ChangeValue);
-                            break;
-                        case "POV":
-                            var pov = AddMapItem(typeof(MapItemPOV)) as MapItemPOV;
-                            pov.JoystickPOV = item.Item.Key + "." + item.ChangeValue;
-                            break;
-                         default:
-                            var axis = AddMapItem(typeof(MapItemAxis)) as MapItemAxis;
-                            axis.JoystickAxis = item.Item.Key + "." + item.ChangeValue;
-                            break;
+                        var type = menu.Tag as Type;
+                        if (list.Contains(type))
+                        {
+                            menu.Visible = true;
+                            onlyOne = menu;
+                            count++;
+                        }
+                        else
+                            menu.Visible = false;
                     }
+                    if (count == 0)
+                        return;
+                    availableItems.Tag = item;
+                    if (count == 1)
+                        onlyOne.PerformClick();
+                    else
+                        availableItems.Show(MousePosition);
+                    //List<Type> list;
+                    //if (!mappingsDetectionType.TryGetValue(item.DetectedType, out list))
+                    //    return;
+                    //foreach (var type in list)
+                    //{
+                    //    switch (item.DetectedType)
+                    //    {
+                    //        case DetectionType.Button:
+                    //            var buttons = AddMapItem(typeof(MapItemButtons)) as MapItemButtons;
+                    //            buttons.Joystick = item.Item.Key;
+                    //            buttons.From = Int32.Parse(item.DetectedValue);
+                    //            break;
+                    //        case DetectionType.Slider:
+                    //            var sliders = AddMapItem(typeof(MapItemSliders)) as MapItemSliders;
+                    //            sliders.Joystick = item.Item.Key;
+                    //            sliders.Pos = Int32.Parse(item.DetectedValue);
+                    //            break;
+                    //        case DetectionType.PointOfView:
+                    //            var pov = AddMapItem(typeof(MapItemPOV)) as MapItemPOV;
+                    //            pov.JoystickPOV = item.Item.Key + "." + item.DetectedValue;
+                    //            break;
+                    //        case DetectionType.Axis:
+                    //            var axis = AddMapItem(typeof(MapItemAxis)) as MapItemAxis;
+                    //            axis.JoystickAxis = item.Item.Key + "." + item.DetectedValue;
+                    //            break;
+                    //        default:
+                    //            break;
+                    //    }
+                    //}
                 }
             }
         }
@@ -163,7 +205,13 @@ namespace JoystickMerger.Generator
             if (type == null)
                 return;
 
-            AddMapItem(type);
+            var item = AddMapItem(type);
+            if (availableItems.Tag != null)
+            {
+                var deviceItem = availableItems.Tag as DeviceListItem;
+                item.Apply(deviceItem);
+                availableItems.Tag = null;
+            }
         }
 
         private IMapItem AddMapItem(Type type)
@@ -307,6 +355,12 @@ namespace JoystickMerger.Generator
         {
             foreach (var item in GetMapItems())
                 item.PostFeed(info, file);
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

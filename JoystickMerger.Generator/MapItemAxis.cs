@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.Axis)]
     partial class MapItemAxis : MapItemBase, IMapItem
     {
         public static string TagName = "Axis";
@@ -76,6 +77,12 @@ namespace JoystickMerger.Generator
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            JoystickAxis = item.Item.Key + "." + item.DetectedValue;
         }
     }
 }

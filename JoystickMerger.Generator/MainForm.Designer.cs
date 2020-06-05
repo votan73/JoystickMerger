@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.RootLevel = new System.Windows.Forms.Panel();
-            this.mapLevel1 = new JoystickMerger.Generator.MapLevel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
             this.BtnGenerate = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.BtnLoad = new System.Windows.Forms.Button();
@@ -41,6 +38,7 @@
             this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openXmlFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExeFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.mapLevel1 = new JoystickMerger.Generator.MapLevel();
             this.deviceList1 = new JoystickMerger.Generator.DeviceList();
             this.RootLevel.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -56,17 +54,8 @@
             this.RootLevel.Size = new System.Drawing.Size(624, 535);
             this.RootLevel.TabIndex = 1;
             // 
-            // mapLevel1
-            // 
-            this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapLevel1.Location = new System.Drawing.Point(0, 0);
-            this.mapLevel1.Name = "mapLevel1";
-            this.mapLevel1.TabIndex = 1;
-            this.mapLevel1.Resize += new System.EventHandler(this.mapLevel1_Resize);
-            // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.BtnGenerate);
             this.panel1.Controls.Add(this.btnSave);
             this.panel1.Controls.Add(this.BtnLoad);
@@ -75,15 +64,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(624, 32);
             this.panel1.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(304, 12);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "label3";
             // 
             // BtnGenerate
             // 
@@ -144,6 +124,15 @@
             // 
             this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
             // 
+            // mapLevel1
+            // 
+            this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mapLevel1.Location = new System.Drawing.Point(0, 0);
+            this.mapLevel1.Name = "mapLevel1";
+            this.mapLevel1.TabIndex = 1;
+            this.mapLevel1.Visible = false;
+            this.mapLevel1.Resize += new System.EventHandler(this.mapLevel1_Resize);
+            // 
             // deviceList1
             // 
             this.deviceList1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
@@ -163,13 +152,12 @@
             this.Controls.Add(this.deviceList1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
-            this.DoubleBuffered = true;
+            this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "MainForm";
             this.Text = "Joystick Merger Generator";
             this.RootLevel.ResumeLayout(false);
             this.RootLevel.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,7 +177,6 @@
         private System.Windows.Forms.SaveFileDialog saveXmlFileDialog;
         private System.Windows.Forms.OpenFileDialog openXmlFileDialog;
         private System.Windows.Forms.SaveFileDialog saveExeFileDialog;
-        private System.Windows.Forms.Label label3;
     }
 }
 

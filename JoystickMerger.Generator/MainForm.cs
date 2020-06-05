@@ -17,9 +17,34 @@ namespace JoystickMerger.Generator
         public MainForm()
         {
             InitializeComponent();
-            MainForm.BoldFont = new Font(Font, FontStyle.Bold);
-            MainForm.BiggerFont = new Font(Font.FontFamily, Font.SizeInPoints * 1.75f);
+            MainForm.BiggerFont = new Font(Font.FontFamily, 14.75f);
         }
+
+        bool notDoubleBuffering;
+        private bool NotDoubleBuffering
+        {
+            get { return notDoubleBuffering; }
+            set
+            {
+                notDoubleBuffering = value;
+                this.MaximizeBox = true;
+            }
+        }
+        int orgExStyle = -1;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                if (orgExStyle == -1)
+                    orgExStyle = base.CreateParams.ExStyle;
+
+                var cp = base.CreateParams;
+                //cp.ExStyle = NotDoubleBuffering ? orgExStyle : cp.ExStyle | 0x02000000; // WS_EX_COMPOSITED
+                cp.ExStyle = NotDoubleBuffering ? cp.ExStyle &= ~0x02000000 : cp.ExStyle | 0x02000000; // WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             input = new DirectInput();
@@ -108,11 +133,13 @@ namespace JoystickMerger.Generator
             finally
             {
                 mapLevel1.ResumeLayout(true);
+                mapLevel1.Visible = true;
             }
             mapLevel1.Focus();
+
+            NotDoubleBuffering = true;
         }
 
-        public static Font BoldFont;
         public static Font BiggerFont;
         DirectInput input;
 
@@ -125,18 +152,22 @@ namespace JoystickMerger.Generator
         {
             var screen = Screen.FromControl(this);
 
-            this.Height = Math.Min(screen.WorkingArea.Height - 32 - this.Top, (Height - ClientSize.Height) + RootLevel.Top + mapLevel1.Height);
+            var height =  Math.Min(screen.WorkingArea.Height - 32 - this.Top, (Height - ClientSize.Height) + RootLevel.Top + mapLevel1.Height);
+            this.MaximumSize = new System.Drawing.Size(screen.WorkingArea.Width, height);
+            this.Height = height;
         }
 
         private void BtnLoad_Click(object sender, EventArgs e)
         {
             if (openXmlFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                notDoubleBuffering = false;
                 var xml = new System.Xml.XmlDocument();
                 xml.Load(openXmlFileDialog.FileName);
                 RealXml(xml);
                 saveXmlFileDialog.FileName = Path.GetFileName(openXmlFileDialog.FileName);
                 saveXmlFileDialog.InitialDirectory = Path.GetDirectoryName(openXmlFileDialog.FileName);
+                notDoubleBuffering = true;
             }
         }
 

@@ -55,7 +55,7 @@ namespace JoystickMerger.Generator
             if (state == 0)
                 return false;
 
-            return (Math.Abs((float)current - (float)state) / state) >= 0.25;
+            return (Math.Abs((float)current - (float)state) / 32768) >= 0.3333;
         }
         static System.Reflection.PropertyInfo[] props;
 
@@ -70,8 +70,8 @@ namespace JoystickMerger.Generator
             {
                 if (current.Buttons[i] != state.Buttons[i])
                 {
-                    ChangeType = "Button";
-                    ChangeValue = (i + 1).ToString();
+                    DetectedType =  DetectionType.Button;
+                    DetectedValue = (i + 1).ToString();
                     LastChangeDectection = DateTime.Now;
                     return;
                 }
@@ -80,8 +80,8 @@ namespace JoystickMerger.Generator
             {
                 if (current.PointOfViewControllers[i] != state.PointOfViewControllers[i])
                 {
-                    ChangeType = "POV";
-                    ChangeValue = (i + 1).ToString();
+                    DetectedType = DetectionType.PointOfView;
+                    DetectedValue = (i + 1).ToString();
                     LastChangeDectection = DateTime.Now;
                     return;
                 }
@@ -90,8 +90,8 @@ namespace JoystickMerger.Generator
             {
                 if (SignificatChange((int)prop.GetValue(current), (int)prop.GetValue(state)))
                 {
-                    ChangeType = "Axis";
-                    ChangeValue = prop.Name;
+                    DetectedType = DetectionType.Axis;
+                    DetectedValue = prop.Name;
                     LastChangeDectection = DateTime.Now;
                     return;
                 }
@@ -101,8 +101,8 @@ namespace JoystickMerger.Generator
                 if (SignificatChange(current.Sliders[i], state.Sliders[i]))
                 {
                     state.Sliders[i] = current.Sliders[i];
-                    ChangeType = "Slider";
-                    ChangeValue = (i + 1).ToString();
+                    DetectedType = DetectionType.Slider;
+                    DetectedValue = (i + 1).ToString();
                     LastChangeDectection = DateTime.Now;
                     return;
                 }
@@ -140,8 +140,8 @@ namespace JoystickMerger.Generator
         public float DeadZone { get { return SliderDeadzone.Value / 10f; } set { SliderDeadzone.Value = Math.Min(500, Math.Max(0, Convert.ToInt32(value * 10f))); } }
 
         public DateTime LastChangeDectection;
-        public string ChangeType;
-        public string ChangeValue;
+        public DetectionType DetectedType;
+        public string DetectedValue;
 
     }
 }

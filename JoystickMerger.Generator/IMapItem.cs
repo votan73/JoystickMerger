@@ -10,6 +10,9 @@ namespace JoystickMerger.Generator
     {
         void ToXml(System.Xml.XmlNode parentNode);
         void FromXml(System.Xml.XmlNode node);
+
+        void Apply(DeviceListItem item);
+
         void Initialize(CompileInfo info);
         void Declaration(CompileInfo info, System.IO.StreamWriter file);
         void PreFeed(CompileInfo info, System.IO.StreamWriter file);

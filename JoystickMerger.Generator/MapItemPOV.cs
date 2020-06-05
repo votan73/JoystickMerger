@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace JoystickMerger.Generator
 {
+    [DetectionType(DetectionType.PointOfView)]
     partial class MapItemPOV : MapItemBase, IMapItem
     {
         public static string TagName = "POV";
@@ -65,6 +66,12 @@ namespace JoystickMerger.Generator
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)
         {
+        }
+
+
+        public void Apply(DeviceListItem item)
+        {
+            JoystickPOV = item.Item.Key + ".POV" + item.DetectedValue;
         }
     }
 }
