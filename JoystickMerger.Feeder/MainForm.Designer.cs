@@ -57,8 +57,7 @@
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.BalloonTipText = "T16000MControllerMerge minimized.\r\nDouble click to restore.";
-            this.notifyIcon1.BalloonTipTitle = "Dual T16000M";
+            this.notifyIcon1.BalloonTipText = "Feeder minimized.\r\nDouble click or right-click to restore.";
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);

@@ -12,7 +12,7 @@ namespace JoystickMerger.Generator
     class MapLevel : TableLayoutPanel, IMapItem
     {
         readonly Button addButton = new Button();
-        static ContextMenuStrip availableItems;
+        ContextMenuStrip availableItems;
 
         readonly static Dictionary<string, Type> mappings = new Dictionary<string, Type>();
         readonly static Dictionary<Type, string> mappingsDisplay = new Dictionary<Type, string>();

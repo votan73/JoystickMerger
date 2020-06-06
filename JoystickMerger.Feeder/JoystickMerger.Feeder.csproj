@@ -108,6 +108,7 @@
     <Compile Include="GameDevPoller.Generated.cs" />
     <Compile Include="HardwareSwitch.cs" />
     <Compile Include="IdentifierList.cs" />
+    <EmbeddedResource Include="JoystickMerger.xml" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

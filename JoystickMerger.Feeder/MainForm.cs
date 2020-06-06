@@ -23,6 +23,7 @@ namespace JoystickMerger.Feeder
             notifyIcon1.Text = Text;
             Icon = Properties.Resources.t16000m;
             SetNotifierState(false);
+            this.notifyIcon1.BalloonTipTitle = Text;
         }
 
         private void SetNotifierState(bool on)

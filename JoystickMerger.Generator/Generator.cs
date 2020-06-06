@@ -60,6 +60,9 @@ namespace JoystickMerger.Generator
             }
             project.Save(projectPath);
 
+            var feederPath = Path.Combine(TempDir, "JoystickMerger.Feeder", "JoystickMerger.xml");
+
+
             var info = new CompileInfo();
             foreach (var item in items)
                 item.Initialize(info);

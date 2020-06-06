@@ -135,8 +135,8 @@ namespace JoystickMerger.Generator
             int index = 0;
             foreach (var joystick in info.Joysticks)
             {
-                file.Write("        const int deadzone");
-                file.Write(++index);
+                file.Write("        const int ");
+                file.Write(joystick.Replace("joystick", "deadzone"));
                 file.Write(" = ");
                 file.Write(Convert.ToInt32(nameToDevice[joystick].DeadZone * 327.68f));
                 file.WriteLine(";");
@@ -156,8 +156,8 @@ namespace JoystickMerger.Generator
             index = 0;
             foreach (var joystick in info.Joysticks)
             {
-                file.Write("        Joystick joystickDevice");
-                file.Write(++index);
+                file.Write("        Joystick ");
+                file.Write(joystick.Replace("joystick", "joystickDevice"));
                 file.WriteLine(";");
             }
         }
@@ -185,8 +185,8 @@ namespace JoystickMerger.Generator
             index = 0;
             foreach (var joystick in info.Joysticks)
             {
-                file.Write("                if (DetectDevice(deviceInstance, ref joystickDevice");
-                file.Write(index + 1);
+                file.Write("                if (DetectDevice(deviceInstance, ref ");
+                file.Write(joystick.Replace("joystick", "joystickDevice"));
                 file.Write(", \"");
                 file.Write(nameToDevice[joystick].Item.Device.InstanceName);
                 file.Write("\", ref preferJoy");
@@ -203,8 +203,8 @@ namespace JoystickMerger.Generator
             index = 0;
             foreach (var joystick in info.Joysticks)
             {
-                file.Write("                if (DetectDevice(deviceInstance, ref joystickDevice");
-                file.Write(index + 1);
+                file.Write("                if (DetectDevice(deviceInstance, ref ");
+                file.Write(joystick.Replace("joystick", "joystickDevice"));
                 file.Write(", \"");
                 file.Write(nameToDevice[joystick].Item.Device.InstanceName);
                 file.Write("\", ref newJoy");

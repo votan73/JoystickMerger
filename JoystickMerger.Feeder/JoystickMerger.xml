@@ -1,0 +1,27 @@
+<JoystickMerger version="1">
+  <Joysticks>
+    <Joystick name="T.16000M 1" preferred="43f10830-c6ff-11e8-8001-444553540000" deadzone="8.4" />
+    <Joystick name="T.16000M 2" preferred="43f10830-c6ff-11e8-8002-444553540000" deadzone="8.4" />
+  </Joysticks>
+  <Mapping>
+    <POV joystick="joystick1.POV1" vjoy="bHats" />
+    <FakePOV joystick="joystick1.RotationZ" direction="x" vjoy="bHatsEx1" />
+    <POV joystick="joystick2.POV1" vjoy="bHatsEx2" />
+    <Axis joystick="joystick2.Y" inverted="true" vjoy="AxisXRot" />
+    <Axis joystick="joystick2.RotationZ" inverted="false" vjoy="AxisYRot" />
+    <Buttons joystick="joystick1" from="0" range="16" mapTo="0" />
+    <Buttons joystick="joystick2" from="0" range="16" mapTo="16" />
+    <ButtonToggle joystick="joystick1" button="15" deactivatedText="Flugzeugsteuerrung" activatedText="Fahrzeugsteuerrung">
+      <Deactivated>
+        <Axis joystick="joystick1.X" inverted="false" vjoy="AxisX" />
+        <Axis joystick="joystick2.X" inverted="false" vjoy="AxisZ" />
+        <Axis joystick="joystick1.Y" inverted="true" vjoy="AxisY" />
+      </Deactivated>
+      <Activated>
+        <Axis joystick="joystick1.X" inverted="false" vjoy="AxisX" />
+        <Axis joystick="joystick1.X" inverted="false" vjoy="AxisZ" />
+        <Axis joystick="joystick1.Y" inverted="false" vjoy="AxisY" />
+      </Activated>
+    </ButtonToggle>
+  </Mapping>
+</JoystickMerger>
