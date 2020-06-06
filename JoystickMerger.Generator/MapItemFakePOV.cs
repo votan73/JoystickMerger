@@ -22,6 +22,7 @@ namespace JoystickMerger.Generator
         }
 
         public string JoystickAxis { get { return dropDownJoystick.SelectedKey; } set { dropDownJoystick.SelectedKey = value; } }
+        public bool Inverted { get { return CbxInvert.Checked; } set { CbxInvert.Checked = value; } }
         public bool IsXDirection { get { return rbAxisX.Checked; } set { rbAxisX.Checked = value; } }
         public string VJoyPOV { get { return dropDownVJoy.SelectedKey; } set { dropDownVJoy.SelectedKey = value; } }
 
@@ -29,6 +30,7 @@ namespace JoystickMerger.Generator
         {
             var node = parentNode.AddElement(TagName);
             node.SetAttribute("joystick", dropDownJoystick.SelectedKey);
+            node.SetAttribute("inverted", Inverted.ToXml());
             node.SetAttribute("direction", IsXDirection ? "x" : "y");
             node.SetAttribute("vjoy", dropDownVJoy.SelectedKey);
         }
@@ -36,6 +38,7 @@ namespace JoystickMerger.Generator
         public void FromXml(System.Xml.XmlNode node)
         {
             dropDownJoystick.SelectedKey = node.GetAttribute("joystick");
+            Inverted = node.GetAttribute("inverted") == "true";
             IsXDirection = node.GetAttribute("direction") != "y";
             dropDownVJoy.SelectedKey = node.GetAttribute("vjoy");
         }
@@ -64,7 +67,15 @@ namespace JoystickMerger.Generator
             file.Write("iReport."); file.Write(VJoyPOV); file.Write(" = FakePOV_"); file.Write(IsXDirection ? "X" : "Y"); file.Write("(");
             file.Write("iReport."); file.Write(VJoyPOV);
             file.Write(", ");
-            file.Write(JoystickAxis.Replace("joystick", "state")); file.WriteLine(");");
+            if (Inverted)
+            {
+                file.Write("(65536 - "); file.Write(JoystickAxis.Replace("joystick", "state")); file.Write(")");
+            }
+            else
+            {
+                file.Write(JoystickAxis.Replace("joystick", "state"));
+            }
+            file.WriteLine(");");
         }
 
         public void PostFeed(CompileInfo info, System.IO.StreamWriter file)

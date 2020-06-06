@@ -32,11 +32,13 @@
             this.dropDownJoystick = new JoystickMerger.Generator.DropDownJoystickAxis();
             this.rbAxisX = new System.Windows.Forms.RadioButton();
             this.rbAxisY = new System.Windows.Forms.RadioButton();
+            this.CbxInvert = new System.Windows.Forms.CheckBox();
             this.ItemsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ItemsPanel
             // 
+            this.ItemsPanel.Controls.Add(this.CbxInvert);
             this.ItemsPanel.Controls.Add(this.rbAxisY);
             this.ItemsPanel.Controls.Add(this.rbAxisX);
             this.ItemsPanel.Controls.Add(this.dropDownVJoy);
@@ -49,7 +51,7 @@
             this.dropDownVJoy.Name = "dropDownVJoy";
             this.dropDownVJoy.SelectedKey = "bHats";
             this.dropDownVJoy.Size = new System.Drawing.Size(75, 21);
-            this.dropDownVJoy.TabIndex = 3;
+            this.dropDownVJoy.TabIndex = 4;
             // 
             // dropDownJoystick
             // 
@@ -65,10 +67,10 @@
             this.rbAxisX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbAxisX.AutoSize = true;
             this.rbAxisX.Checked = true;
-            this.rbAxisX.Location = new System.Drawing.Point(298, 7);
+            this.rbAxisX.Location = new System.Drawing.Point(303, 7);
             this.rbAxisX.Name = "rbAxisX";
             this.rbAxisX.Size = new System.Drawing.Size(32, 17);
-            this.rbAxisX.TabIndex = 1;
+            this.rbAxisX.TabIndex = 2;
             this.rbAxisX.TabStop = true;
             this.rbAxisX.Text = "X";
             this.rbAxisX.UseVisualStyleBackColor = true;
@@ -77,12 +79,23 @@
             // 
             this.rbAxisY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbAxisY.AutoSize = true;
-            this.rbAxisY.Location = new System.Drawing.Point(336, 7);
+            this.rbAxisY.Location = new System.Drawing.Point(339, 7);
             this.rbAxisY.Name = "rbAxisY";
             this.rbAxisY.Size = new System.Drawing.Size(32, 17);
-            this.rbAxisY.TabIndex = 2;
+            this.rbAxisY.TabIndex = 3;
             this.rbAxisY.Text = "Y";
             this.rbAxisY.UseVisualStyleBackColor = true;
+            // 
+            // CbxInvert
+            // 
+            this.CbxInvert.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.CbxInvert.AutoSize = true;
+            this.CbxInvert.Location = new System.Drawing.Point(235, 8);
+            this.CbxInvert.Name = "CbxInvert";
+            this.CbxInvert.Size = new System.Drawing.Size(65, 17);
+            this.CbxInvert.TabIndex = 1;
+            this.CbxInvert.Text = "Inverted";
+            this.CbxInvert.UseVisualStyleBackColor = true;
             // 
             // MapItemFakePOV
             // 
@@ -101,5 +114,6 @@
         private DropDownJoystickAxis dropDownJoystick;
         private System.Windows.Forms.RadioButton rbAxisY;
         private System.Windows.Forms.RadioButton rbAxisX;
+        private System.Windows.Forms.CheckBox CbxInvert;
     }
 }
