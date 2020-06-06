@@ -296,7 +296,7 @@ namespace JoystickMerger.Generator
 
         public void Apply(DeviceListItem item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

@@ -105,6 +105,10 @@ namespace JoystickMerger.Generator
                 }
                 addButton.Font = MainForm.BiggerFont;
                 addButton.Click += addButton_Click;
+                DragEnter += MapLevel_DragEnter;
+                DragOver += MapLevel_DragEnter;
+                DragDrop += MapLevel_DragDrop;
+                AllowDrop = true;
             }
         }
 
@@ -166,35 +170,6 @@ namespace JoystickMerger.Generator
                         onlyOne.PerformClick();
                     else
                         availableItems.Show(MousePosition);
-                    //List<Type> list;
-                    //if (!mappingsDetectionType.TryGetValue(item.DetectedType, out list))
-                    //    return;
-                    //foreach (var type in list)
-                    //{
-                    //    switch (item.DetectedType)
-                    //    {
-                    //        case DetectionType.Button:
-                    //            var buttons = AddMapItem(typeof(MapItemButtons)) as MapItemButtons;
-                    //            buttons.Joystick = item.Item.Key;
-                    //            buttons.From = Int32.Parse(item.DetectedValue);
-                    //            break;
-                    //        case DetectionType.Slider:
-                    //            var sliders = AddMapItem(typeof(MapItemSliders)) as MapItemSliders;
-                    //            sliders.Joystick = item.Item.Key;
-                    //            sliders.Pos = Int32.Parse(item.DetectedValue);
-                    //            break;
-                    //        case DetectionType.PointOfView:
-                    //            var pov = AddMapItem(typeof(MapItemPOV)) as MapItemPOV;
-                    //            pov.JoystickPOV = item.Item.Key + "." + item.DetectedValue;
-                    //            break;
-                    //        case DetectionType.Axis:
-                    //            var axis = AddMapItem(typeof(MapItemAxis)) as MapItemAxis;
-                    //            axis.JoystickAxis = item.Item.Key + "." + item.DetectedValue;
-                    //            break;
-                    //        default:
-                    //            break;
-                    //    }
-                    //}
                 }
             }
         }
@@ -283,6 +258,45 @@ namespace JoystickMerger.Generator
 
         public IEnumerable<MapItemBase> Items { get { return Controls.OfType<MapItemBase>(); } }
 
+        #region Drag'n'Drop
+        void MapLevel_DragDrop(object sender, DragEventArgs e)
+        {
+            var control = e.Data.GetData(typeof(MapItemBase)) as MapItemBase;
+            if (Controls.Contains(control))
+            {
+                var oldRow = this.GetRow(control);
+                var other = this.GetChildAtPoint(PointToClient(new Point(e.X, e.Y)));
+                if (other != null)
+                {
+                    var newRow = this.GetRow(other);
+                    if (newRow > oldRow)
+                        Controls.SetChildIndex(control, newRow);
+                    else if (newRow > 0)
+                        Controls.SetChildIndex(control, newRow - 1);
+                    else
+                        Controls.SetChildIndex(control, newRow);
+                }
+                else
+                {
+                    var newRow = RowCount - 2;
+                    Controls.SetChildIndex(control, newRow);
+                }
+                int index = 0;
+                foreach (Control ctl in Controls)
+                    SetRow(ctl, index++);
+            }
+            else
+                Controls.Add(control);
+        }
+
+        void MapLevel_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(MapItemBase)))
+                e.Effect = DragDropEffects.Move & e.AllowedEffect;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+        #endregion
         public void ToXml(System.Xml.XmlNode parentNode)
         {
             foreach (var map in Controls.OfType<IMapItem>())
@@ -357,10 +371,9 @@ namespace JoystickMerger.Generator
                 item.PostFeed(info, file);
         }
 
-
         public void Apply(DeviceListItem item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

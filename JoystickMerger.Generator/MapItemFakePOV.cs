@@ -23,7 +23,7 @@ namespace JoystickMerger.Generator
 
         public string JoystickAxis { get { return dropDownJoystick.SelectedKey; } set { dropDownJoystick.SelectedKey = value; } }
         public bool Inverted { get { return CbxInvert.Checked; } set { CbxInvert.Checked = value; } }
-        public bool IsXDirection { get { return rbAxisX.Checked; } set { rbAxisX.Checked = value; } }
+        public bool IsXDirection { get { return rbAxisX.Checked; } set { rbAxisX.Checked = value; rbAxisY.Checked = !value; } }
         public string VJoyPOV { get { return dropDownVJoy.SelectedKey; } set { dropDownVJoy.SelectedKey = value; } }
 
         public void ToXml(System.Xml.XmlNode parentNode)

@@ -118,7 +118,7 @@
             // 
             // openXmlFileDialog
             // 
-            this.openXmlFileDialog.FileName = "openFileDialog1";
+            this.openXmlFileDialog.FileName = "*.joystickmerger.xml";
             // 
             // saveExeFileDialog
             // 
