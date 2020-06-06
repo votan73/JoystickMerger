@@ -209,6 +209,29 @@ namespace JoystickMerger.Feeder
                 }
             }
         }
+        private uint FakePOV_Y(uint prev, int rot)
+        {
+            unchecked
+            {
+                if (prev == uint.MaxValue)
+                {
+                    if (rot < 20000)
+                        return 18000;
+                    if (rot > 45536)
+                        return 0;
+
+                    return uint.MaxValue;
+                }
+                else
+                {
+                    if (rot < 20000)
+                        return (uint)(prev < 18000 ? 18000 + 4500 : 18000 - 4500);
+                    if (rot > 45536)
+                        return (uint)(prev < 18000 ? 36000 - 4500 : 000 + 4500);
+                    return prev;
+                }
+            }
+        }
 
     }
 }
