@@ -266,15 +266,12 @@ namespace JoystickMerger.Generator
             {
                 var oldRow = this.GetRow(control);
                 var other = this.GetChildAtPoint(PointToClient(new Point(e.X, e.Y)));
+                if (other == control)
+                    return;
                 if (other != null)
                 {
                     var newRow = this.GetRow(other);
-                    if (newRow > oldRow)
-                        Controls.SetChildIndex(control, newRow);
-                    else if (newRow > 0)
-                        Controls.SetChildIndex(control, newRow - 1);
-                    else
-                        Controls.SetChildIndex(control, newRow);
+                    Controls.SetChildIndex(control, newRow);
                 }
                 else
                 {

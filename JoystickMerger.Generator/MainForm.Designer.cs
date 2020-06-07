@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.RootLevel = new System.Windows.Forms.Panel();
+            this.mapLevel1 = new JoystickMerger.Generator.MapLevel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.BtnGenerate = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -38,7 +39,6 @@
             this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openXmlFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExeFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.mapLevel1 = new JoystickMerger.Generator.MapLevel();
             this.deviceList1 = new JoystickMerger.Generator.DeviceList();
             this.RootLevel.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -53,6 +53,15 @@
             this.RootLevel.Name = "RootLevel";
             this.RootLevel.Size = new System.Drawing.Size(624, 535);
             this.RootLevel.TabIndex = 1;
+            // 
+            // mapLevel1
+            // 
+            this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mapLevel1.Location = new System.Drawing.Point(0, 0);
+            this.mapLevel1.Name = "mapLevel1";
+            this.mapLevel1.TabIndex = 1;
+            this.mapLevel1.Visible = false;
+            this.mapLevel1.Resize += new System.EventHandler(this.mapLevel1_Resize);
             // 
             // panel1
             // 
@@ -123,15 +132,6 @@
             // saveExeFileDialog
             // 
             this.saveExeFileDialog.Filter = "Feeder Executable|*.exe";
-            // 
-            // mapLevel1
-            // 
-            this.mapLevel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapLevel1.Location = new System.Drawing.Point(0, 0);
-            this.mapLevel1.Name = "mapLevel1";
-            this.mapLevel1.TabIndex = 1;
-            this.mapLevel1.Visible = false;
-            this.mapLevel1.Resize += new System.EventHandler(this.mapLevel1_Resize);
             // 
             // deviceList1
             // 

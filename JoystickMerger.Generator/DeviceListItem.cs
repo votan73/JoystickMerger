@@ -32,6 +32,11 @@ namespace JoystickMerger.Generator
                     dev.SetCooperativeLevel(FindForm().Handle, CooperativeLevel.Background | CooperativeLevel.NonExclusive);
                     dev.Acquire();
                     Instance = dev;
+                    var caps = dev.Capabilities;
+
+                    ButtonCount = caps.ButtonCount;
+                    POVCount = caps.PovCount;
+
                     Task.Factory.StartNew(() => { Instance.Poll(); state = Instance.GetCurrentState(); });
                     if (pollTimer == null)
                     {
@@ -42,8 +47,9 @@ namespace JoystickMerger.Generator
                     }
                     OnTimer += DeviceListItem_OnTimer;
                 }
-                catch
+                catch(System.Exception ex)
                 {
+                    MessageBox.Show(ex.ToString());
                     dev.Dispose();
                 }
             }
@@ -52,12 +58,8 @@ namespace JoystickMerger.Generator
 
         private bool SignificatChange(int current, int state)
         {
-            if (state == 0)
-                return false;
-
-            return (Math.Abs((float)current - (float)state) / 32768) >= 0.3333;
+            return (Math.Abs(current - state) / 32768.0f) >= 0.3333;
         }
-        static System.Reflection.PropertyInfo[] props;
 
         void DeviceListItem_OnTimer(object sender, EventArgs e)
         {
@@ -66,20 +68,22 @@ namespace JoystickMerger.Generator
 
             Instance.Poll();
             var current = Instance.GetCurrentState();
-            for (int i = 0; i < current.Buttons.Length; i++)
+            for (int i = 0; i < ButtonCount; i++)
             {
                 if (current.Buttons[i] != state.Buttons[i])
                 {
-                    DetectedType =  DetectionType.Button;
+                    state.Buttons[i] = current.Buttons[i];
+                    DetectedType = DetectionType.Button;
                     DetectedValue = (i + 1).ToString();
                     LastChangeDectection = DateTime.Now;
                     return;
                 }
             }
-            for (int i = 0; i < current.PointOfViewControllers.Length; i++)
+            for (int i = 0; i < POVCount; i++)
             {
                 if (current.PointOfViewControllers[i] != state.PointOfViewControllers[i])
                 {
+                    state.PointOfViewControllers[i] = current.PointOfViewControllers[i];
                     DetectedType = DetectionType.PointOfView;
                     DetectedValue = (i + 1).ToString();
                     LastChangeDectection = DateTime.Now;
@@ -90,6 +94,7 @@ namespace JoystickMerger.Generator
             {
                 if (SignificatChange((int)prop.GetValue(current), (int)prop.GetValue(state)))
                 {
+                    prop.SetValue(state, prop.GetValue(current));
                     DetectedType = DetectionType.Axis;
                     DetectedValue = prop.Name;
                     LastChangeDectection = DateTime.Now;
@@ -123,6 +128,9 @@ namespace JoystickMerger.Generator
         public DeviceItem Item;
         public Joystick Instance { get; private set; }
         private JoystickState state;
+        static System.Reflection.PropertyInfo[] props;
+        private int ButtonCount;
+        private int POVCount;
 
         static System.Threading.Timer pollTimer;
         static event EventHandler OnTimer;
