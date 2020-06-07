@@ -80,9 +80,9 @@ namespace JoystickMerger.Generator
         }
 
 
-        public void Apply(DeviceListItem item)
+        public void Apply(DetectionResult result)
         {
-            JoystickAxis = item.Item.Key + "." + item.DetectedValue;
+            JoystickAxis = result.Joystick + "." + result.Value;
         }
     }
 }

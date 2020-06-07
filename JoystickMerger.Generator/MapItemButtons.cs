@@ -154,10 +154,11 @@ namespace JoystickMerger.Generator
         }
 
 
-        public void Apply(DeviceListItem item)
+        public void Apply(DetectionResult result)
         {
-            Joystick = item.Item.Key;
-            From = Int32.Parse(item.DetectedValue);
+            Joystick = result.Joystick;
+            From = result.From;
+            Range = result.To - result.From + 1;
         }
     }
 }

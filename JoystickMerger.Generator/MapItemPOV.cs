@@ -69,9 +69,9 @@ namespace JoystickMerger.Generator
         }
 
 
-        public void Apply(DeviceListItem item)
+        public void Apply(DetectionResult result)
         {
-            JoystickPOV = item.Item.Key + ".POV" + item.DetectedValue;
+            JoystickPOV = result.Joystick + ".POV" + result.Value;
         }
     }
 }

@@ -63,6 +63,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataSources.cs" />
+    <Compile Include="DetectionResult.cs" />
     <Compile Include="DetectionType.cs" />
     <Compile Include="DetectionTypeAttribute.cs" />
     <Compile Include="DeviceItem.cs" />

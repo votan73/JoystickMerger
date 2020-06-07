@@ -129,7 +129,7 @@ namespace JoystickMerger.Generator
         public Joystick Instance { get; private set; }
         private JoystickState state;
         static System.Reflection.PropertyInfo[] props;
-        private int ButtonCount;
+        public int ButtonCount { get; private set; }
         private int POVCount;
 
         static System.Threading.Timer pollTimer;

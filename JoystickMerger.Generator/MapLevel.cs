@@ -165,7 +165,14 @@ namespace JoystickMerger.Generator
                     }
                     if (count == 0)
                         return;
-                    availableItems.Tag = item;
+
+                    var result = new DetectionResult();
+                    result.Joystick = item.Item.Key;
+                    result.Value = item.DetectedValue;
+                    result.Type = item.DetectedType;
+                    result.From = dialog.ButtonFrom;
+                    result.To = dialog.ButtonTo;
+                    availableItems.Tag = result;
                     if (count == 1)
                         onlyOne.PerformClick();
                     else
@@ -183,8 +190,8 @@ namespace JoystickMerger.Generator
             var item = AddMapItem(type);
             if (availableItems.Tag != null)
             {
-                var deviceItem = availableItems.Tag as DeviceListItem;
-                item.Apply(deviceItem);
+                var result = availableItems.Tag as DetectionResult;
+                item.Apply(result);
                 availableItems.Tag = null;
             }
         }
@@ -368,7 +375,7 @@ namespace JoystickMerger.Generator
                 item.PostFeed(info, file);
         }
 
-        public void Apply(DeviceListItem item)
+        public void Apply(DetectionResult result)
         {
             throw new NotSupportedException();
         }
